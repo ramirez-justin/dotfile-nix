@@ -44,11 +44,11 @@ Follow these steps in order. Each step builds upon the previous one.
 First, we'll get the configuration files onto your system:
 
 ```bash
-# Create Documents directory if it doesn't exist
-mkdir -p ~/Documents
+# Create dev directory if it doesn't exist
+mkdir -p ~/dev
 
 # Clone the repository
-cd ~/Documents
+cd ~/dev
 git clone <your-repo-url> dotfile
 cd dotfile
 ```

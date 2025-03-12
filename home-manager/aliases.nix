@@ -59,7 +59,7 @@
   # Path Configuration
   # Get paths from Home Manager config
   homeDir = config.home.homeDirectory;
-  dotfileDir = "${homeDir}/Documents/dotfile";
+  dotfileDir = "${homeDir}/dev/dotfile";
 
   # Common aliases for both platforms
   commonAliases = {
@@ -87,7 +87,7 @@
     # Navigation and File Management
     dotfile = "cd ${dotfileDir}";                 # Navigate to dotfiles
     dl = "cd ${homeDir}/Downloads";               # Quick downloads access
-    docs = "cd ${homeDir}/Documents";             # Quick documents access
+    docs = "cd ${homeDir}/dev";                   # Quick dev access
     cdf = "cd $(ls -d */ | fzf)";                 # Fuzzy find directories
 
     # Modern CLI Tools

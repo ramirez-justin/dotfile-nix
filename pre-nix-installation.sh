@@ -40,7 +40,7 @@
 #
 # File Structure:
 # --------------
-# ~/Documents/dotfile/
+# ~/dev/dotfile/
 # ├── nix/
 # │   ├── nix.conf           # Nix configuration
 # │   ├── zshrc              # Shell configuration
@@ -71,7 +71,7 @@
 # ├── darwin/
 # └── home-manager/
 #
-# ~/Documents/dotfile/ (Your configuration repository)
+# ~/dev/dotfile/ (Your configuration repository)
 #
 # Requirements:
 # ------------
@@ -103,7 +103,7 @@
 # Maintenance:
 # -----------
 # To update your system after installation:
-# 1. cd ~/Documents/dotfile
+# 1. cd ~/dev/dotfile
 # 2. git pull
 # 3. darwin-rebuild switch --flake .#ss-mbp
 
@@ -240,7 +240,7 @@ if ! xcode-select -p &> /dev/null; then
     echo -e "${BLUE}Installing Xcode Command Line Tools...${NC}"
     # Try softwareupdate method first
     softwareupdate --install -a
-    
+
     # If that doesn't work, try xcode-select --install
     if ! xcode-select -p &> /dev/null; then
         xcode-select --install || true
@@ -248,16 +248,16 @@ if ! xcode-select -p &> /dev/null; then
         echo -e "${BLUE}Press RETURN when installation is complete...${NC}"
         read
     fi
-    
+
     # Verify installation
     if ! xcode-select -p &> /dev/null; then
         handle_error "Xcode Command Line Tools installation failed. Please try installing manually."
     fi
-    
+
     # Accept license
     echo -e "${BLUE}Accepting Xcode license...${NC}"
     sudo xcodebuild -license accept
-    
+
     echo -e "${GREEN}Xcode Command Line Tools installed successfully!${NC}"
 else
     echo -e "${GREEN}Xcode Command Line Tools already installed at: $(xcode-select -p)${NC}"
@@ -280,12 +280,12 @@ fi
 if ! command_exists brew; then
     echo -e "${BLUE}Installing Homebrew...${NC}"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    
+
     # Add Homebrew to PATH immediately
     echo -e "${BLUE}Adding Homebrew to PATH...${NC}"
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
-    
+
     echo -e "${GREEN}Homebrew installed successfully${NC}"
     echo -e "${BLUE}Please restart your shell and run this script again to continue with Nix installation.${NC}"
     exit 0
@@ -301,7 +301,7 @@ echo -e "${GREEN}Initial packages installed successfully${NC}"
 # Stage 2: Nix Installation
 if ! command_exists nix; then
     echo -e "${BLUE}Installing Nix...${NC}"
-    
+
     # Backup Management
     # Create backups of existing shell configurations
     echo -e "${BLUE}Backing up shell configuration files...${NC}"
@@ -328,22 +328,22 @@ if ! command_exists nix; then
             sudo cp "$file" "${file}.backup-before-nix"
         fi
     done
-    
+
     # Nix Installation Process
     # Install using multi-user configuration
     sh <(curl -L https://nixos.org/nix/install)
-    
+
     # Post-Installation Verification
     echo -e "${BLUE}Waiting for Nix installation to complete...${NC}"
     sleep 5
-    
+
     # Test Installation
     echo -e "${BLUE}Testing Nix installation...${NC}"
     if ! nix-shell -p neofetch --run neofetch; then
         echo -e "${RED}Nix installation test failed. Please check the error messages above.${NC}"
         exit 1
     fi
-    
+
     echo -e "${GREEN}Nix installed successfully${NC}"
     echo -e "${BLUE}Please restart your shell and run this script again to continue with nix-darwin installation.${NC}"
     exit 0
@@ -356,7 +356,7 @@ echo -e "${BLUE}Creating necessary directories...${NC}"
 mkdir -p "$HOME/.config/nix"
 mkdir -p "$HOME/.config/darwin"
 mkdir -p "$HOME/.config/home-manager"
-mkdir -p "$HOME/Documents/dotfile"
+mkdir -p "$HOME/dev/dotfile"
 
 # Dotfiles Repository Setup
 # Handle repository cloning and configuration
@@ -365,22 +365,22 @@ read -r setup_dotfiles
 if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
     # Repository Management
     # Clone or update existing repository
-    if [ ! -d "$HOME/Documents/dotfile/.git" ]; then
+    if [ ! -d "$HOME/dev/dotfile/.git" ]; then
         echo -e "${BLUE}Enter your dotfiles repository URL:${NC}"
         read -r dotfiles_url
-        git clone "$dotfiles_url" "$HOME/Documents/dotfile"
+        git clone "$dotfiles_url" "$HOME/dev/dotfile"
     else
         # Update existing repository
         echo -e "${BLUE}Dotfiles repository already exists. Do you want to pull latest changes? (y/n)${NC}"
         read -r update_dotfiles
         if [[ $update_dotfiles =~ ^[Yy]$ ]]; then
-            cd "$HOME/Documents/dotfile"
+            cd "$HOME/dev/dotfile"
             git pull
         fi
     fi
-    
-    cd "$HOME/Documents/dotfile"
-    
+
+    cd "$HOME/dev/dotfile"
+
     # Configuration Verification
     # Verify flake.nix exists
     if [ ! -f "flake.nix" ]; then
@@ -405,33 +405,33 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
     # Symlink Management
     # Cleanup existing symlinks
     echo -e "${BLUE}Cleaning up existing symlinks...${NC}"
-    
+
     # File Cleanup
     # Remove potential conflicting files
     echo -e "${BLUE}Removing existing files...${NC}"
     rm -f "$HOME/.zshrc" "$HOME/.dynamic-config.zsh" "$HOME/.zshenv" "$HOME/.zprofile"
-    
+
     # Symlink Cleanup
     # Remove existing symlinks if they exist
     rm -f "$HOME/.config/nix" "$HOME/.config/darwin" "$HOME/.config/home-manager"
-    
+
     # Directory Preparation
     # Create parent directory
     mkdir -p "$HOME/.config"
-    
+
     # Symlink Creation
     # Create symlinks manually
     echo -e "${BLUE}Creating symlinks...${NC}"
-    cd "$HOME/Documents/dotfile"
+    cd "$HOME/dev/dotfile"
     for dir in nix darwin home-manager; do
         if [ -d "$dir" ]; then
-            ln -sfn "$HOME/Documents/dotfile/$dir" "$HOME/.config/$dir" || handle_error "Failed to create symlink for $dir"
+            ln -sfn "$HOME/dev/dotfile/$dir" "$HOME/.config/$dir" || handle_error "Failed to create symlink for $dir"
             echo -e "${GREEN}Created symlink for $dir${NC}"
         else
             handle_error "Source directory $dir does not exist"
         fi
     done
-    
+
     # Symlink Verification
     # Verify the links were created correctly
     echo -e "${BLUE}Verifying symlinks...${NC}"
@@ -439,7 +439,7 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
         echo -e "${BLUE}Checking $dir...${NC}"
         if [ -L "$HOME/.config/$dir" ]; then
             actual=$(readlink "$HOME/.config/$dir")
-            expected="$HOME/Documents/dotfile/$dir"
+            expected="$HOME/dev/dotfile/$dir"
             if [ "$actual" = "$expected" ]; then
                 echo -e "${GREEN}Symlink for $dir created successfully${NC}"
                 ls -la "$HOME/.config/$dir"
@@ -454,23 +454,23 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
             ls -la "$HOME/.config/$dir" 2>/dev/null || echo "Does not exist"
         fi
     done
-    
+
     # Now install nix-darwin using the flake configuration
     echo -e "${BLUE}Installing nix-darwin...${NC}"
-    
+
     # Flakes Configuration
     # Enable flakes support
     mkdir -p ~/.config/nix
     echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-    
+
     # Build System
     # Install and build nix-darwin
     export NIX_CONFIG="experimental-features = nix-command flakes"
-    cd "$HOME/Documents/dotfile"  # Change to the directory containing flake.nix
+    cd "$HOME/dev/dotfile"  # Change to the directory containing flake.nix
     nix run nix-darwin -- switch --flake .#"$HOSTNAME" || handle_error "Failed to install nix-darwin"
-    
+
     echo -e "${GREEN}nix-darwin installed successfully!${NC}"
-    echo -e "${BLUE}You can now use 'cd ~/Documents/dotfile && darwin-rebuild switch --flake .#$HOSTNAME' to update your system${NC}"
+    echo -e "${BLUE}You can now use 'cd ~/dev/dotfile && darwin-rebuild switch --flake .#$HOSTNAME' to update your system${NC}"
 fi
 
 # Stage 6: Shell Configuration
@@ -483,7 +483,7 @@ if ! command_exists zsh; then
     if ! zsh --version >/dev/null 2>&1; then
         brew install zsh
     fi
-    
+
     # Shell Registration
     # Add zsh to /etc/shells if not present
     if ! grep -q "$(which zsh)" /etc/shells; then
@@ -532,7 +532,7 @@ if [[ $setup_git_ssh =~ ^[Yy]$ ]]; then
     # Configure Git globally
     git config --global user.name "$git_name"
     git config --global user.email "$git_email"
-    
+
     # Create/Update user-config.nix
     echo -e "${BLUE}Creating user configuration...${NC}"
     cat > user-config.nix << EOF
@@ -549,17 +549,17 @@ if [[ $setup_git_ssh =~ ^[Yy]$ ]]; then
     # Generate SSH key
     echo -e "${BLUE}Generating SSH key...${NC}"
     ssh-keygen -t ed25519 -C "$git_email" -f "$HOME/.ssh/github"
-    
+
     # SSH Agent Configuration
     # Start ssh-agent and add key
     eval "$(ssh-agent -s)"
     ssh-add "$HOME/.ssh/github"
-    
+
     # SSH Config Setup
     # Create/update SSH config
     mkdir -p "$HOME/.ssh"
     echo -e "Host github.com\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/github" >> "$HOME/.ssh/config"
-    
+
     # GitHub Integration
     # Display public key and instructions
     echo -e "${GREEN}Your SSH public key:${NC}"
@@ -569,12 +569,12 @@ if [[ $setup_git_ssh =~ ^[Yy]$ ]]; then
     echo "2. Click your profile picture -> Settings"
     echo "3. Click 'SSH and GPG keys' -> 'New SSH key'"
     echo "4. Paste the above key and save"
-    
+
     # User Verification
     # Wait for user to add key to GitHub
     echo -e "${BLUE}Press any key after adding the key to GitHub...${NC}"
     read -n 1 -s
-    
+
     # Connection Test
     # Test SSH connection
     echo -e "${BLUE}Testing GitHub SSH connection...${NC}"
@@ -606,8 +606,8 @@ echo -e "Nix won't work in active shell sessions until you restart them."
 # Final Shell Configuration
 # Create required symlinks for shell configuration
 # Create symlinks for zsh files
-ln -sf "$HOME/Documents/dotfile/nix/dynamic-config.zsh" "$HOME/.dynamic-config.zsh" || handle_error "Failed to create symlink for dynamic-config.zsh"
-ln -sf "$HOME/Documents/dotfile/nix/zshrc" "$HOME/.zshrc" || handle_error "Failed to create symlink for zshrc"
+ln -sf "$HOME/dev/dotfile/nix/dynamic-config.zsh" "$HOME/.dynamic-config.zsh" || handle_error "Failed to create symlink for dynamic-config.zsh"
+ln -sf "$HOME/dev/dotfile/nix/zshrc" "$HOME/.zshrc" || handle_error "Failed to create symlink for zshrc"
 
 # Completion Message
 # Final message

@@ -106,8 +106,8 @@ The repository is organized into logical components:
 2. **Clone Configuration**
 
      ```bash
-     mkdir -p ~/Documents
-     cd ~/Documents
+     mkdir -p ~/dev
+     cd ~/dev
      git clone <your-repo-url> dotfile
      cd dotfile
      ```

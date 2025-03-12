@@ -475,7 +475,7 @@ fi
 echo -e "${BLUE}Do you want to remove the dotfiles repository? (y/n)${NC}"
 read -r remove_dotfiles
 if [[ $remove_dotfiles =~ ^[Yy]$ ]]; then
-    rm -rf "$HOME/Documents/dotfile"
+    rm -rf "$HOME/dev/dotfile"
 fi
 
 # Editor Tools Cleanup
