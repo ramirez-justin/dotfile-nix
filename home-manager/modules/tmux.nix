@@ -58,7 +58,7 @@
     shortcut = "a";     # Prefix key (Ctrl-a)
     baseIndex = 1;      # Start window numbering at 1
     escapeTime = 0;     # Remove escape key delay
-    
+
     extraConfig = ''
       # Mouse and Terminal Settings
       # Enable better interaction and color support

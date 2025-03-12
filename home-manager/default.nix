@@ -70,6 +70,7 @@
     # Core Environment
     ./modules/zsh.nix
     ./modules/alacritty
+    ./modules/ghostty
     ./modules/karabiner
     ./modules/lazygit.nix
     ./modules/starship.nix

@@ -67,7 +67,7 @@
     enable = true;
     enableCompletion = true;
     autosuggestion.enable = true;
-    
+
     # Add environment variables
     sessionVariables = {
       # Ensure all necessary paths are available
@@ -78,7 +78,7 @@
 
     initExtra = ''
       # Starship prompt configured via starship.nix
-      
+
       # Development Tools Setup
       # Initialize SDKMAN if installed
       if [ -d "$HOME/.sdkman" ]; then
@@ -105,7 +105,7 @@
 
       # Initialize zoxide
       eval "$(zoxide init zsh)"
-      
+
       # FZF Integration Widgets
       # Interactive git status with file preview
       function fzf-git-status() {
@@ -126,7 +126,7 @@
         zle reset-prompt
       }
       zle -N fzf-git-status
-      
+
       # Directory navigation with hidden files
       function fzf-cd-with-hidden() {
         local dir
@@ -134,7 +134,7 @@
         zle reset-prompt
       }
       zle -N fzf-cd-with-hidden
-      
+
       # History and Directory Navigation
       # Enable up/down arrow history search
       autoload -U up-line-or-beginning-search
@@ -144,42 +144,42 @@
       # Enable directory history navigation
       zle -N dirhistory_zle_dirhistory_up
       zle -N dirhistory_zle_dirhistory_down
-      
+
       # Key Binding Configuration
       # Word Navigation
       # ALT-Left/Right for word navigation
       bindkey "^[f" forward-word
       bindkey "^[b" backward-word
-      
+
       # Word Deletion
       # CTRL-Delete/Backspace for word deletion
       bindkey "^[[3;5~" kill-word
       bindkey "^H" backward-kill-word
-      
+
       # Line Editing
       # CTRL-U clears line before cursor
       bindkey "^U" backward-kill-line
-      
+
       # ALT-Backspace deletes word before cursor
       bindkey "^[^?" backward-kill-word
-      
+
       # Cursor Movement
       # CTRL-A/E for start/end of line (like in Emacs)
       bindkey "^A" beginning-of-line
       bindkey "^E" end-of-line
-      
+
       # Directory Navigation
       # ALT-Up/Down for directory history
       bindkey "^[[1;3A" dirhistory_zle_dirhistory_up
       bindkey "^[[1;3B" dirhistory_zle_dirhistory_down
-      
+
       # FZF Enhanced Functions
       # Directory navigation with preview
       fzf-cd-with-hidden() {
         local dir
         dir=$(find "''${1:-$PWD}" -type d 2> /dev/null | fzf +m) && cd "$dir"
       }
-      
+
       # Git status with preview
       fzf-git-status() {
         local selections=$(
@@ -197,7 +197,7 @@
           echo "$selections" | awk '{print $2}' | tr '\n' ' '
         fi
       }
-      
+
       # FZF Key Bindings
       # CTRL-_ to open file in VSCode
       bindkey -s '^_' 'code $(fzf)^M'
@@ -218,6 +218,7 @@
         "extract"
         "mosh"
         "timer"
+        "terraform"
       ];
       theme = "agnoster";
     };
@@ -243,6 +244,12 @@
           rev = "0.7.1";
           sha256 = "sha256-gOG0NLlaJfotJfs+SUhGgLTNOnGLjoqnUp54V9aFJg8=";
         };
+      }
+      {
+        name = "alias-tips";
+        src = pkgs.fetchFromGitHub {
+          owner = "djui";
+          repo = "alias-tips";
       }
     ];
   };

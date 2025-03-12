@@ -42,19 +42,19 @@
     # Package Sources
     # Core nixpkgs repository
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    
+
     # Home Manager for user environment management
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     # nix-darwin for macOS system configuration
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     # Homebrew management
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     homebrew-core = {
@@ -75,7 +75,7 @@
   let
     system = "aarch64-darwin";
     # Validate hostname format
-    validateHostname = hostname: 
+    validateHostname = hostname:
       let
         # Nix allows only letters, numbers, and hyphens as valid characters for hostnames
         validFormat = builtins.match "[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*" hostname != null;
@@ -114,7 +114,7 @@
         # Core System Modules
         # Base darwin configuration
         ./darwin/configuration.nix
-        
+
         # User Environment
         # Home manager configuration
         home-manager.darwinModules.home-manager
@@ -142,7 +142,7 @@
             };
           };
         }
-        
+
         # Package Management
         # Homebrew configuration
         nix-homebrew.darwinModules.nix-homebrew
@@ -177,12 +177,12 @@
               _FXShowPosixPathInTitle = true;       # Show full path
               CreateDesktop = true;                 # Show desktop icons
             };
-            
+
             # Login Window Settings
             loginwindow = {
               GuestEnabled = false;                 # Disable guest login
             };
-            
+
             # Global System Settings
             NSGlobalDomain = {
               AppleICUForce24HourTime = true;      # Use 24-hour time
@@ -224,4 +224,4 @@
     darwinPackages = self.darwinConfigurations.${validatedHostname}.pkgs;
   };
 }
-  
+

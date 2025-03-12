@@ -74,7 +74,12 @@
 # - Packages are organized by category for better maintenance
 # - Comments explain package purposes and dependencies
 
-{ config, pkgs, lib, userConfig, ... }: {
+{ config, pkgs, lib, userConfig, ... }:
+
+let
+  # Get terminal preference from userConfig, defaulting to "alacritty" if not specified
+  preferredTerminal = userConfig.terminal or "alacritty";
+in {
   nix-homebrew = {
     # Install Homebrew under the default prefix
     enable = true;
@@ -89,13 +94,13 @@
   # Homebrew packages configuration
   homebrew = {
     enable = true;
-    
+
     # Configure taps
     taps = [
       "homebrew/bundle"     # For Brewfile support
       "warrensbox/tap"      # For tfswitch
     ];
-    
+
     onActivation = {
       autoUpdate = true;
       upgrade = true;
@@ -115,13 +120,23 @@
       "mas"                         # Mac App Store CLI
       "stow"                        # Symlink farm manager
       "zoxide"                      # Smarter cd command
-      
+
       # Python Development Environment
       # Managed via Homebrew for better macOS integration
       "pyenv"                       # Python version manager
       "uv"                          # Python package manager
       "pipx"                        # Python package manager
-      
+
+      # Other Programming Languages & their Tools
+      "go"                          # Go programming language
+      "rustup"                      # Rust toolchain manager
+      "lua"                         # Lua programming language
+      "luarocks"                    # Lua package manager
+      "ruby"                        # Ruby programming language
+      "composer"                    # PHP dependency manager
+      "php"                         # PHP programming language
+      "julia"                       # Julia programming language
+
       # Development Tools
       # These versions are preferred over Nix for various reasons
       "cmake"                       # Build system
@@ -132,14 +147,16 @@
       "git-lfs"                     # Git large file storage
       "lazygit"                     # Terminal UI for git
       "node"                        # Node.js (includes npm and npx)
-      
+      "deno"                        # Secure JavaScript runtime
+      "neovim"                      # Modern text editor
+
       # Text Processing and Search
       "bat"                         # Modern cat with syntax highlighting
       "fzf"                         # Fuzzy finder
       "jq"                          # JSON processor
       "ripgrep"                     # Fast grep alternative
       "yq"                          # YAML processor
-      
+
       # Terminal Utilities
       "bottom"                      # System/Process monitor
       "btop"                        # Modern resource monitor (replaces htop)
@@ -148,10 +165,10 @@
       "starship"                    # Cross-shell prompt
       "tldr"                        # Simplified man pages
       "tmux"                        # Terminal multiplexer
-      
+
       # Security
       "gnupg"                       # OpenPGP implementation
-      
+
       # Cloud and Infrastructure Tools
       "awscli"                      # AWS CLI
       "terraform-docs"              # Terraform documentation
@@ -163,7 +180,7 @@
     casks = [
       # Communication
       "discord"                     # Move from configuration.nix
-      
+
       # Cloud Tools
       "google-cloud-sdk"            # Google Cloud Platform SDK
       
@@ -175,11 +192,12 @@
       "visual-studio-code"             # Code editor
       
       # Terminal and System Tools
-      "alacritty"                      # GPU-accelerated terminal
-      "karabiner-elements"             # Keyboard customization
-      "rectangle"                      # Window management
-      "the-unarchiver"                 # Archive extraction
-      
+      (lib.optional (preferredTerminal == "alacritty") "alacritty")    # GPU-accelerated terminal (conditional)
+      (lib.optional (preferredTerminal == "ghostty") pkgs.ghostty)     # Fast, native, feature-rich terminal
+      "karabiner-elements"                                             # Keyboard customization
+      "rectangle"                                                      # Window management
+      "the-unarchiver"                                                 # Archive extraction
+
       # Productivity and Communication
       "bitwarden"                      # Password manager
       "brave-browser"                  # Privacy-focused browser
@@ -188,10 +206,10 @@
       "obsidian"                       # Knowledge base and note-taking
       "spotify"                        # Music streaming
       "whatsapp"                       # Messaging
-      
+
       # Media
       "vlc"                            # Media player
-      
+
       # Fonts
       "font-fira-code-nerd-font"       # Alternative with ligatures
       "font-hack-nerd-font"            # Clean monospace

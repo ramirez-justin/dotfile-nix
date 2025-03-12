@@ -177,7 +177,7 @@
     # Create AWS credential management directory
     mkdir -p /opt/aws_cred_copy
     mkdir -p $HOME/.aws
-    
+
     # Environment Cleanup Script
     # Create the unset script
     cat > /opt/aws_cred_copy/copy_and_unset << 'EOF'
@@ -190,21 +190,21 @@
     unset AWS_PROFILE
     unset AWS_DEFAULT_PROFILE
     EOF
-    
+
     chmod +x /opt/aws_cred_copy/copy_and_unset
-    
+
     # AWS Region Configuration
     # Create AWS config file with default region
     cat > $HOME/.aws/config << 'EOF'
     [default]
     region = us-west-2
     output = json
-    
+
     [profile prod]
     region = us-west-2
     output = json
     EOF
-    
+
     # Credential Management Script
     # Create the Python script for credential management
     cat > /opt/aws_cred_copy/copy_credentials_from_env << 'EOF'
@@ -212,17 +212,17 @@
     import sys
     import os
     import configparser
-    
+
     # Default to 'default' profile if none specified
     profile = "default"
     if len(sys.argv)> 1:
         profile = sys.argv[1]
-    
+
     # Verify required environment variables exist
     if not os.environ.get('AWS_ACCESS_KEY_ID'):
         print("No keys found on env. exit")
         exit(1)
-    
+
     # Update credentials file with current environment
     HOME = os.environ['HOME']
     config = configparser.ConfigParser()
@@ -230,17 +230,17 @@
     config[profile] = {'aws_access_key_id': os.environ['AWS_ACCESS_KEY_ID'],
                       'aws_secret_access_key': os.environ['AWS_SECRET_ACCESS_KEY'],
                       'aws_session_token': os.environ['AWS_SESSION_TOKEN']}
-    
+
     # Write updated credentials and clean environment
     with open(f'{HOME}/.aws/credentials', 'w') as configfile:
         config.write(configfile)
-    
+
     del os.environ['AWS_ACCESS_KEY_ID']
     del os.environ['AWS_SECRET_ACCESS_KEY']
     del os.environ['AWS_SESSION_TOKEN']
     print(f"Updated profile {profile} on ~/.aws/credentials")
     EOF
-    
+
     chmod +x /opt/aws_cred_copy/copy_credentials_from_env
   '';
 
@@ -253,7 +253,7 @@
 
   system.activationScripts.postUserActivation.text = ''
     echo "Setting up development tools..."
-    
+
     # Xcode Command Line Tools Check
     # Required for many development tools
     if ! xcode-select -p &> /dev/null; then
@@ -263,7 +263,7 @@
     else
       echo "✓ Xcode Command Line Tools installed"
     fi
-    
+
     # Java Development Environment Setup
     # Install and configure SDKMAN for Java version management
     if [ ! -d "$HOME/.sdkman" ]; then
@@ -280,7 +280,7 @@
       PATH="${pkgs.unzip}/bin:${pkgs.zip}/bin:${pkgs.gnutar}/bin:${pkgs.curl}/bin:${pkgs.gnused}/bin:$PATH" bash "$TMPFILE" || true
       rm "$TMPFILE"
     fi
-    
+
     # Java Version Management
     # Install and configure multiple Java versions via SDKMAN
     if [ -d "$HOME/.sdkman" ]; then
@@ -288,11 +288,11 @@
       # Set up SDKMAN environment
       export SDKMAN_DIR="$HOME/.sdkman"
       export SDKMAN_BASH_COMPLETION=false
-      
+
       # Disable shellcheck warning about not following the source
       # shellcheck disable=SC1090,SC1091
       source "$HOME/.sdkman/bin/sdkman-init.sh" 2>/dev/null || true
-      
+
       # Helper function for Java installation
       # Checks if version exists before installing
       install_java_version() {
@@ -309,7 +309,7 @@
       install_java_version "8.0.392-amzn"     # Java 8 LTS
       install_java_version "11.0.21-amzn"     # Java 11 LTS (Default)
       install_java_version "17.0.9-amzn"      # Java 17 LTS
-      
+
       # Set Java 11 as the default version
       # Required for most current applications
       if sdk current java 2>/dev/null | grep -q "11.0.21-amzn"; then
@@ -323,7 +323,7 @@
     # Python Development Environment
     # Configure Poetry and pyenv for Python version management
     echo "Setting up Python environment..."
-    
+
     # Poetry Package Manager Setup
     # Install specific version for compatibility
     POETRY_PATH="$HOME/.local/bin/poetry"
@@ -343,7 +343,7 @@
     # Configure Python versions and global defaults
     export PYENV_ROOT=~/.pyenv
     export PATH="${pkgs.pyenv}/bin:$PATH"
-    
+
     if command -v pyenv &> /dev/null; then
       echo "Setting up Python versions..."
       # Initialize pyenv directory
@@ -375,7 +375,7 @@
         # install_python_version "3.9"     # Legacy support
         # install_python_version "3.11"    # Latest features
       fi
-      
+
       # Set Global Python Version if pyenv has any versions
       if pyenv versions | grep -q "3\."; then
         echo "Setting Python 3.10 as global Python version"

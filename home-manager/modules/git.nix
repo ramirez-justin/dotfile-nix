@@ -42,7 +42,7 @@ in {
       push.autoSetupRemote = true;       # Auto-configure upstream
       # Editor and File Handling
       core = {
-        editor = "vim";                  # Default editor for commits
+        editor = "nvim";                  # Default editor for commits
         autocrlf = "input";              # Line ending management
       };
       # UI Configuration
