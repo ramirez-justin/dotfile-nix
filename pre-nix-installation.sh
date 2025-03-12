@@ -293,8 +293,12 @@ fi
 
 # Install initial required packages via Homebrew
 echo -e "${BLUE}Installing initial required packages...${NC}"
-brew install git stow
-echo -e "${GREEN}Initial packages installed successfully${NC}"
+for pkg in git stow tree; do
+    if ! command_exists "$pkg"; then
+        brew install "$pkg"
+    fi
+done
+echo -e "${GREEN}Initial packages are installed${NC}"
 
 # Stage 2: Nix Installation and Configuration
 # -----------------------------------------
@@ -337,6 +341,13 @@ if ! command_exists nix; then
     echo -e "${BLUE}Waiting for Nix installation to complete...${NC}"
     sleep 5
 
+    # Source Nix profile instead of executing a new shell
+    if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+        . ~/.nix-profile/etc/profile.d/nix.sh
+    elif [ -e /etc/profile.d/nix.sh ]; then
+        . /etc/profile.d/nix.sh
+    fi
+
     # Test Installation
     echo -e "${BLUE}Testing Nix installation...${NC}"
     if ! nix-shell -p neofetch --run neofetch; then
@@ -352,11 +363,19 @@ fi
 # Stage 3: Directory and Dotfiles Setup
 # -----------------------------------
 # Create necessary directories
-echo -e "${BLUE}Creating necessary directories...${NC}"
-mkdir -p "$HOME/.config/nix"
-mkdir -p "$HOME/.config/darwin"
-mkdir -p "$HOME/.config/home-manager"
-mkdir -p "$HOME/dev/dotfile"
+echo -e "${BLUE}Creating necessary directories if they don't exist...${NC}"
+if [ ! -d "$HOME/.config/nix" ]; then
+    mkdir -p "$HOME/.config/nix"
+fi
+if [ ! -d "$HOME/.config/darwin" ]; then
+    mkdir -p "$HOME/.config/darwin"
+fi
+if [ ! -d "$HOME/.config/home-manager" ]; then
+    mkdir -p "$HOME/.config/home-manager"
+fi
+if [ ! -d "$HOME/dev/dotfile" ]; then
+    mkdir -p "$HOME/dev/dotfile"
+fi
 
 # Dotfiles Repository Setup
 # Handle repository cloning and configuration
@@ -375,6 +394,7 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
         read -r update_dotfiles
         if [[ $update_dotfiles =~ ^[Yy]$ ]]; then
             cd "$HOME/dev/dotfile"
+            # TODO: Check out main prior to pulling
             git pull
         fi
     fi
@@ -413,11 +433,14 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
 
     # Symlink Cleanup
     # Remove existing symlinks if they exist
-    rm -f "$HOME/.config/nix" "$HOME/.config/darwin" "$HOME/.config/home-manager"
+    echo -e "${BLUE}Removing existing symlinks...${NC}"
+    rm -rf "$HOME/.config/nix" "$HOME/.config/darwin" "$HOME/.config/home-manager"
 
     # Directory Preparation
     # Create parent directory
-    mkdir -p "$HOME/.config"
+    if [ ! -d "$HOME/.config" ]; then
+        mkdir -p "$HOME/.config"
+    fi
 
     # Symlink Creation
     # Create symlinks manually
@@ -458,10 +481,6 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
     # Now install nix-darwin using the flake configuration
     echo -e "${BLUE}Installing nix-darwin...${NC}"
 
-    # Flakes Configuration
-    # Enable flakes support
-    mkdir -p ~/.config/nix
-    echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 
     # Build System
     # Install and build nix-darwin
