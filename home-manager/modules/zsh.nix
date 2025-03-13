@@ -250,6 +250,9 @@
         src = pkgs.fetchFromGitHub {
           owner = "djui";
           repo = "alias-tips";
+          rev = "e40e3f0498c6ac32e6a8c695c05eaad1fedd0a60"; # Using a specific commit
+          sha256 = "sha256-7FRxjqFoLMQUkxf9WQlIgAYxxyiNPE15G1++MfQXxLA=";
+        };
       }
     ];
   };
