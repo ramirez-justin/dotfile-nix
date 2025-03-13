@@ -136,6 +136,7 @@ in {
       "composer"                    # PHP dependency manager
       "php"                         # PHP programming language
       "julia"                       # Julia programming language
+      "zsh"                         # Z shell
 
       # Development Tools
       # These versions are preferred over Nix for various reasons

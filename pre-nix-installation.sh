@@ -514,12 +514,28 @@ else
     echo -e "${GREEN}Zsh already installed${NC}"
 fi
 
+
+# Check for newest version of Zsh
+if [ "$(zsh --version | cut -d' ' -f2)" -lt 5.9 ]; then
+    echo -e "${BLUE}Zsh version is outdated. Switching to latest version...${NC}"
+    if ! brew list --formula | grep -q "^zsh$"; then
+        brew install zsh
+    fi
+    # Add the new shell to /etc/shells if it's not already there
+    if ! grep -q "$(brew --prefix)/bin/zsh" /etc/shells; then
+        echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
+    fi
+    # Change the shell for the current user
+    sudo chsh -s "$(brew --prefix)/bin/zsh" "$(whoami)"
+    echo -e "${GREEN}Shell changed to Homebrew's Zsh. Please log out and back in for changes to take effect.${NC}"
+fi
+
 # Stage 7: Git and SSH Configuration
 # -------------------------------
 # Setup Git SSH for GitHub
 echo -e "${BLUE}Do you want to setup Git SSH for GitHub? (y/n)${NC}"
-read -r setup_git_ssh
-if [[ $setup_git_ssh =~ ^[Yy]$ ]]; then
+read -r setup_git
+if [[ $setup_git =~ ^[Yy]$ ]]; then
     # Get user information
     echo -e "${BLUE}Enter your macOS username (the one you use to log in):${NC}"
     read -r USERNAME
@@ -551,53 +567,64 @@ if [[ $setup_git_ssh =~ ^[Yy]$ ]]; then
     # Configure Git globally
     git config --global user.name "$git_name"
     git config --global user.email "$git_email"
+    git config --global core.editor "nvim"
+    git config --global pull.rebase true
 
-    # Create/Update user-config.nix
-    echo -e "${BLUE}Creating user configuration...${NC}"
-    cat > user-config.nix << EOF
-    {
-      username = "$USERNAME";
-      fullName = "$FULLNAME";
-      email = "$EMAIL";
-      githubUsername = "$GITHUB_USERNAME";
-      hostname = "$HOSTNAME";
-    }
-    EOF
+    # Use GH CLI for GitHub Authentication
+    if ! command_exists gh; then
+        echo -e "${BLUE}Installing GitHub CLI...${NC}"
+        brew install gh
+    fi
+    echo -e "${BLUE}Authenticating with GitHub, follow the prompts...${NC}"
+    gh auth login
 
-    # SSH Key Generation
-    # Generate SSH key
-    echo -e "${BLUE}Generating SSH key...${NC}"
-    ssh-keygen -t ed25519 -C "$git_email" -f "$HOME/.ssh/github"
 
-    # SSH Agent Configuration
-    # Start ssh-agent and add key
-    eval "$(ssh-agent -s)"
-    ssh-add "$HOME/.ssh/github"
-
-    # SSH Config Setup
-    # Create/update SSH config
-    mkdir -p "$HOME/.ssh"
-    echo -e "Host github.com\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/github" >> "$HOME/.ssh/config"
-
-    # GitHub Integration
-    # Display public key and instructions
-    echo -e "${GREEN}Your SSH public key:${NC}"
-    cat "$HOME/.ssh/github.pub"
-    echo -e "${BLUE}Please add this key to your GitHub account:${NC}"
-    echo "1. Go to GitHub.com"
-    echo "2. Click your profile picture -> Settings"
-    echo "3. Click 'SSH and GPG keys' -> 'New SSH key'"
-    echo "4. Paste the above key and save"
-
-    # User Verification
-    # Wait for user to add key to GitHub
-    echo -e "${BLUE}Press any key after adding the key to GitHub...${NC}"
-    read -n 1 -s
-
-    # Connection Test
-    # Test SSH connection
-    echo -e "${BLUE}Testing GitHub SSH connection...${NC}"
-    ssh -T git@github.com
+    # # Create/Update user-config.nix
+    # echo -e "${BLUE}Creating user configuration...${NC}"
+    # cat > user-config.nix << EOF
+    # {
+    #   username = "$USERNAME";
+    #   fullName = "$FULLNAME";
+    #   email = "$EMAIL";
+    #   githubUsername = "$GITHUB_USERNAME";
+    #   hostname = "$HOSTNAME";
+    # }
+    # EOF
+    #
+    # # SSH Key Generation
+    # # Generate SSH key
+    # echo -e "${BLUE}Generating SSH key...${NC}"
+    # ssh-keygen -t ed25519 -C "$git_email" -f "$HOME/.ssh/github"
+    #
+    # # SSH Agent Configuration
+    # # Start ssh-agent and add key
+    # eval "$(ssh-agent -s)"
+    # ssh-add "$HOME/.ssh/github"
+    #
+    # # SSH Config Setup
+    # # Create/update SSH config
+    # mkdir -p "$HOME/.ssh"
+    # echo -e "Host github.com\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/github" >> "$HOME/.ssh/config"
+    #
+    # # GitHub Integration
+    # # Display public key and instructions
+    # echo -e "${GREEN}Your SSH public key:${NC}"
+    # cat "$HOME/.ssh/github.pub"
+    # echo -e "${BLUE}Please add this key to your GitHub account:${NC}"
+    # echo "1. Go to GitHub.com"
+    # echo "2. Click your profile picture -> Settings"
+    # echo "3. Click 'SSH and GPG keys' -> 'New SSH key'"
+    # echo "4. Paste the above key and save"
+    #
+    # # User Verification
+    # # Wait for user to add key to GitHub
+    # echo -e "${BLUE}Press any key after adding the key to GitHub...${NC}"
+    # read -n 1 -s
+    #
+    # # Connection Test
+    # # Test SSH connection
+    # echo -e "${BLUE}Testing GitHub SSH connection...${NC}"
+    # ssh -T git@github.com
 fi
 
 # Stage 8: Final Configuration
