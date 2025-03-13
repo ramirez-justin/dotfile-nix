@@ -17,17 +17,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  # Configure Ghostty with our settings
-  programs.ghostty = {
-    enable = true;
-
-    # Enable shell integration for better terminal experience
-    enableZshIntegration = true;
-
-    # Import settings from our config file
-    settings = builtins.fromTOML (builtins.readFile ./config.toml);
-  };
-
   # Set up additional Ghostty configuration
   # This runs after configuration files are written
   home.activation.ghosttySetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
