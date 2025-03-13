@@ -486,7 +486,7 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
     # Install and build nix-darwin
     export NIX_CONFIG="experimental-features = nix-command flakes"
     cd "$HOME/dev/dotfile"  # Change to the directory containing flake.nix
-    nix run nix-darwin -- switch --flake .#"$HOSTNAME" || handle_error "Failed to install nix-darwin"
+    nix run nix-darwin -- switch --flake .#"$HOSTNAME" --show-trace || handle_error "Failed to install nix-darwin"
 
     echo -e "${GREEN}nix-darwin installed successfully!${NC}"
     echo -e "${BLUE}You can now use 'cd ~/dev/dotfile && darwin-rebuild switch --flake .#$HOSTNAME' to update your system${NC}"
