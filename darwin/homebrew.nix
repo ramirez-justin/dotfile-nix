@@ -186,7 +186,6 @@ in {
       "google-cloud-sdk"            # Google Cloud Platform SDK
       
       # Development Tools
-      "cursor"
       "docker"
       "jetbrains-toolbox"              # JetBrains IDE manager
       "postman"                        # API testing tool
@@ -202,22 +201,21 @@ in {
       "the-unarchiver"                                                 # Archive extraction
 
       # Productivity and Communication
-      "bitwarden"                      # Password manager
-      "brave-browser"                  # Privacy-focused browser
+      "1password"                      # Password manager
+      "google-chrome"                  # Web browser
       "claude"                         # Claude AI desktop app
       "insync"                         # Google Drive client
       "obsidian"                       # Knowledge base and note-taking
       "spotify"                        # Music streaming
-      "whatsapp"                       # Messaging
+      "slack"                          # Messaging
 
       # Media
       "vlc"                            # Media player
 
       # Fonts
-      "font-fira-code-nerd-font"       # Alternative with ligatures
-      "font-hack-nerd-font"            # Clean monospace
-      "font-jetbrains-mono-nerd-font"  # Primary coding font
-      "font-meslo-lg-nerd-font"        # Terminal font
+      "font-space-mono-nerd-font"      # original fixed-width type family
+      "font-fira-code-nerd-font"       # monospaced font with programming ligatures
+      "font-maple-mono-nerd-font"      # open source monospace font, smoothing your coding flow
     ];
 
     # Global options
