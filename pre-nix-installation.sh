@@ -360,6 +360,9 @@ if ! command_exists nix; then
     exit 0
 fi
 
+# Update Nix Flake
+nix flake update
+
 # Stage 3: Directory and Dotfiles Setup
 # -----------------------------------
 # Create necessary directories

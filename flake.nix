@@ -55,6 +55,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Neovim nightly builds
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Homebrew management
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     homebrew-core = {
@@ -103,6 +109,9 @@
         allowUnfree = true;
       };
     };
+    overlays = [
+        inputs.neovim-nightly-overlay.overlays.default
+    ];
   in
   {
     # Darwin System Configuration
@@ -196,6 +205,7 @@
           system.stateVersion = 5;
           nixpkgs = nixpkgsConfig // {
             hostPlatform = "aarch64-darwin";
+            overlays = overlays;
           };
           # Security Settings
 
