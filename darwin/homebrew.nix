@@ -192,8 +192,10 @@ in {
       "visual-studio-code"             # Code editor
       
       # Terminal and System Tools
-      (lib.optional (preferredTerminal == "alacritty") "alacritty")    # GPU-accelerated terminal (conditional)
-      (lib.optional (preferredTerminal == "ghostty") pkgs.ghostty)     # Fast, native, feature-rich terminal
+      # Conditionally include terminal emulators based on user preference
+      ] ++ lib.optional (preferredTerminal == "alacritty") "alacritty" # GPU-accelerated terminal
+      ++ lib.optional (preferredTerminal == "ghostty") "ghostty" # Fast, native, feature-rich terminal
+      ++ [
       "karabiner-elements"                                             # Keyboard customization
       "rectangle"                                                      # Window management
       "the-unarchiver"                                                 # Archive extraction
