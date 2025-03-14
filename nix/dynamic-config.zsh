@@ -54,7 +54,7 @@
 # FZF-enhanced history searching functions
 # Quick search with Ctrl-S
 fzf-z-search() {
-  local res=$(history -n 1 | tail -f | fzf)
+  local res=$(history -n 1 | tail -n | fzf)
   if [ -n "$res" ]; then
       BUFFER+="$res"
       zle accept-line
@@ -71,12 +71,12 @@ bindkey '^s' fzf-z-search
 select-history() {
   BUFFER=$(history -n -r 1 \
       | awk 'length($0) > 2' \
-      | rg -v "^...$" \          # Filter out 3-char commands
-      | rg -v "^....$" \         # Filter out 4-char commands
-      | rg -v "^.....$" \        # Filter out 5-char commands
-      | rg -v "^......$" \       # Filter out 6-char commands
-      | rg -v "^exit$" \         # Filter out exit commands
-      | uniq -u \                # Remove duplicates
+      | rg -v "^...$" \
+      | rg -v "^....$" \
+      | rg -v "^.....$" \
+      | rg -v "^......$" \
+      | rg -v "^exit$" \
+      | uniq -u \
       | fzf-tmux --no-sort +m --query "$LBUFFER" --prompt="History > ")
   CURSOR=$#BUFFER
 }

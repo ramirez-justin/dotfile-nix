@@ -215,7 +215,7 @@ in {
       # Fonts
       "font-space-mono-nerd-font"      # original fixed-width type family
       "font-fira-code-nerd-font"       # monospaced font with programming ligatures
-      "font-maple-mono-nerd-font"      # open source monospace font, smoothing your coding flow
+      "font-maple-mono"                # open source monospace font, smoothing your coding flow
     ];
 
     # Global options

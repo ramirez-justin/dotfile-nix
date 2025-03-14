@@ -328,14 +328,22 @@
     # Install specific version for compatibility
     POETRY_PATH="$HOME/.local/bin/poetry"
     if [ ! -f "$POETRY_PATH" ] || ! "$POETRY_PATH" --version | grep -q "1.5.1"; then
-      echo "Installing Poetry 1.5.1..."
-      export PATH="$HOME/.local/bin:$PATH"
-      # Install via pipx for isolation
-      pipx install poetry==1.5.1
-      # Ensure pipx binaries are available
-      pipx ensurepath
+    echo "Installing Poetry 1.5.1..."
+    # Add both Homebrew and local bin to PATH
+    export PATH="/opt/homebrew/bin:$HOME/.local/bin:$PATH"
+
+    # Check if pipx is available
+    if ! command -v pipx &> /dev/null; then
+        echo "pipx not found, installing Poetry with pip..."
+        python3 -m pip install --user poetry==1.5.1
     else
-      echo "Poetry $(poetry --version) is already installed at $POETRY_PATH"
+        # Install via pipx for isolation
+        pipx install poetry==1.5.1
+        # Ensure pipx binaries are available
+        pipx ensurepath
+    fi
+    else
+    echo "Poetry $(poetry --version) is already installed at $POETRY_PATH"
     fi
 
     # Setup pyenv and install Python versions

@@ -488,6 +488,15 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
     # Build System
     # Install and build nix-darwin
     export NIX_CONFIG="experimental-features = nix-command flakes"
+    export PATH="/opt/homebrew/bin:$PATH"
+
+    # Install pipx explicitly before running nix-darwin
+    if ! command -v pipx &> /dev/null; then
+        echo "Installing pipx..."
+        python3 -m pip install --user pipx
+        python3 -m pipx ensurepath
+    fi
+
     cd "$HOME/dev/dotfile"  # Change to the directory containing flake.nix
     nix run nix-darwin -- switch --flake .#"$HOSTNAME" --show-trace || handle_error "Failed to install nix-darwin"
 
