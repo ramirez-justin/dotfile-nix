@@ -327,113 +327,76 @@
     # Python Development Environment
     echo "Setting up Python environment..."
 
-    # Install UV - faster Python package installer
-    UV_PATH="/opt/homebrew/bin/uv"
-    if ! command -v uv &> /dev/null; then
-        echo "Installing UV package manager..."
-        brew install uv
-    else
-        echo "UV $(uv --version) is already installed"
-    fi
-
     # Poetry Package Manager Setup
+    # Install specific version for compatibility
     POETRY_PATH="$HOME/.local/bin/poetry"
-    if [ ! -f "$POETRY_PATH" ] || ! "$POETRY_PATH" --version | grep -q "1.7.1"; then
-        echo "Installing Poetry 1.7.1..."
-        export PATH="/opt/homebrew/bin:$HOME/.local/bin:$PATH"
+    if [ ! -f "$POETRY_PATH" ] || ! "$POETRY_PATH" --version | grep -q "1.5.1"; then
+    echo "Installing Poetry 1.5.1..."
+    # Add both Homebrew and local bin to PATH
+    export PATH="/opt/homebrew/bin:$HOME/.local/bin:$PATH"
 
-        # Use UV to install Poetry (faster than pipx)
-        uv pip install --user poetry==1.7.1
+    # Check if pipx is available
+    if ! command -v pipx &> /dev/null; then
+        echo "pipx not found, installing Poetry with pip..."
+        python3 -m pip install --user poetry==1.5.1
     else
-        echo "Poetry $(poetry --version) is already installed"
+        # Install via pipx for isolation
+        pipx install poetry==1.5.1
+        # Ensure pipx binaries are available
+        pipx ensurepath
+    fi
+    else
+    echo "Poetry $(poetry --version) is already installed at $POETRY_PATH"
     fi
 
+    # Setup pyenv and install Python versions
     # Python Version Management with pyenv
-    export PYENV_ROOT="$HOME/.pyenv"
+    # Configure Python versions and global defaults
+    export PYENV_ROOT=~/.pyenv
     export PATH="${pkgs.pyenv}/bin:$PATH"
 
     if command -v pyenv &> /dev/null; then
-        echo "Setting up Python versions..."
-        mkdir -p "$PYENV_ROOT"
-        eval "$(pyenv init -)"
+      echo "Setting up Python versions..."
+      # Initialize pyenv directory
+      mkdir -p "$PYENV_ROOT"
+      eval "$(pyenv init -)"
 
+      # First check if any Python is already installed
+      if command -v python3 &> /dev/null; then
+        PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
+        echo "Python $PYTHON_VERSION is already installed on the system"
+      else
+        # Python Version Installation Helper
         # Function to install Python version if not already installed
         install_python_version() {
-            if ! pyenv versions | grep -q "^[*[:space:]]*$1"; then
-                echo "Installing Python $1"
-                CFLAGS="-I$(brew --prefix openssl)/include -I$(brew --prefix readline)/include -I$(brew --prefix sqlite)/include" \
-                LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib -L$(brew --prefix sqlite)/lib" \
-                pyenv install -s "$1" || true
-            else
-                echo "Python $1 is already installed"
-            fi
+          # Check if any version that starts with the given prefix exists
+          if ! pyenv versions | grep -q "^[*[:space:]]*$1"; then
+            echo "Installing Python $1"
+            # Use -s flag to skip if version exists
+            pyenv install -s "$1" || true
+          else
+            echo "Python $1 is already installed"
+          fi
         }
 
-        # Install Python versions
-        install_python_version "3.12"  # Latest stable version
-        install_python_version "3.10"  # Good compatibility version
+        # Python Version Management
+        # Install and configure specific Python versions
+        install_python_version "3.10"      # Primary development version
+        # Add more versions as needed:
+        # install_python_version "3.9"     # Legacy support
+        # install_python_version "3.11"    # Latest features
+      fi
 
-        # Set global Python version
-        echo "Setting Python 3.12 as global Python version"
-        pyenv global 3.12
-
-        # Set up base Python environment with essential packages
-        echo "Installing base Python packages..."
-        uv pip install --user \
-            ipython \
-            ruff \
-            mypy \
-            codespell \
-            pytest \
-            httpx \
-            pydantic \
-            rich \
-            jupyterlab \
-            pandas \
-            matplotlib \
-            virtualenv \
-            pre-commit
-
-        # Create a utility for quickly setting up new projects
-        mkdir -p "$HOME/bin"
-        cat > "$HOME/bin/pysetup" << 'EOF'
-#!/bin/bash
-# Quick Python project setup script
-PROJECT_NAME=${1:-myproject}
-PYTHON_VERSION=${2:-3.12}
-
-# Create project directory
-mkdir -p "$PROJECT_NAME"
-cd "$PROJECT_NAME" || exit
-
-# Set local Python version
-pyenv local $PYTHON_VERSION
-
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate
-
-# Install basic dev packages
-uv pip install \
-    ruff \
-    pytest \
-    pre-commit
-
-# Initialize Poetry if available
-if command -v poetry &> /dev/null; then
-    poetry init --no-interaction
-fi
-
-# Create minimal project structure
-mkdir -p "$PROJECT_NAME" tests
-touch "$PROJECT_NAME/__init__.py" tests/__init__.py
-
-echo "Project $PROJECT_NAME set up with Python $PYTHON_VERSION"
-EOF
-
-        chmod +x "$HOME/bin/pysetup"
-        echo "Created utility script: pysetup"
+      # Set Global Python Version if pyenv has any versions
+      if pyenv versions | grep -q "3\."; then
+        echo "Setting Python 3.10 as global Python version"
+        pyenv global 3.10
+      fi
+    else
+      # Installation Error Handling
+      echo "pyenv not found. Please ensure it's installed via Nix"
     fi
+
 
     # Setup Cargo and Rust
     echo "Setting up Rust environment..."

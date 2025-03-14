@@ -80,12 +80,12 @@ let
   # Get terminal preference from userConfig, defaulting to "alacritty" if not specified
   preferredTerminal = userConfig.terminal or "alacritty";
 in {
-  nix-homebrew = {
-    # Install Homebrew under the default prefix
-    enable = true;
+    nix-homebrew = {
+        # Install Homebrew under the default prefix
+        enable = true;
 
-    # Set Homebrew owner
-    user = userConfig.username;
+        # Set Homebrew owner
+        user = userConfig.username;
 
     # Handle existing Homebrew installations
     autoMigrate = true;
@@ -108,35 +108,22 @@ in {
       cleanup = "zap";      # More aggressive cleanup
     };
 
-    # CLI Tools
-    brews = [
-      # Core System Utilities
-      # These are installed via Homebrew for macOS-specific optimizations
-      "coreutils"                   # GNU core utilities
-      "duf"                         # Disk usage/free utility
-      "dust"                        # More intuitive du
-      "eza"                         # Modern ls replacement
-      "fd"                          # Simple find alternative
-      "mas"                         # Mac App Store CLI
-      "stow"                        # Symlink farm manager
-      "zoxide"                      # Smarter cd command
+    # Homebrew packages configuration
+    homebrew = {
+        enable = true;
 
-      # Python Development Environment
-      # Managed via Homebrew for better macOS integration
-      "pyenv"                       # Python version manager
-      "uv"                          # Python package manager
-      "pipx"                        # Python package manager
+        # Configure taps
+        taps = [
+        "homebrew/bundle"
+        "warrensbox/tap"      # For tfswitch
+        ];
 
-      # Other Programming Languages & their Tools
-      "go"                          # Go programming language
-      "rustup"                      # Rust toolchain manager
-      "lua"                         # Lua programming language
-      "luarocks"                    # Lua package manager
-      "ruby"                        # Ruby programming language
-      "composer"                    # PHP dependency manager
-      "php"                         # PHP programming language
-      "julia"                       # Julia programming language
-      "zsh"                         # Z shell
+        onActivation = {
+        autoUpdate = true;
+        upgrade = true;
+        # Remove old versions
+        cleanup = "zap";      # More aggressive cleanup
+        };
 
       # Development Tools
       # These versions are preferred over Nix for various reasons
@@ -150,37 +137,64 @@ in {
       "node"                        # Node.js (includes npm and npx)
       "deno"                        # Secure JavaScript runtime
       "neovim"                      # Modern text editor
+        # CLI Tools
+        brews = [
+        # Core System Utilities
+        # These are installed via Homebrew for macOS-specific optimizations
+        "coreutils"                   # GNU core utilities
+        "duf"                         # Disk usage/free utility
+        "dust"                        # More intuitive du
+        "eza"                         # Modern ls replacement
+        "fd"                          # Simple find alternative
+        "mas"                         # Mac App Store CLI
+        "stow"                        # Symlink farm manager
+        "zoxide"                      # Smarter cd command
 
-      # Text Processing and Search
-      "bat"                         # Modern cat with syntax highlighting
-      "fzf"                         # Fuzzy finder
-      "jq"                          # JSON processor
-      "ripgrep"                     # Fast grep alternative
-      "yq"                          # YAML processor
+        # Python Development Environment
+        # Managed via Homebrew for better macOS integration
+        "pyenv"                       # Python version manager
+        "pyenv-virtualenv"            # Python virtual environments
+        "uv"                          # Python package manager
+        "pipx"                        # Python package manager
 
-      # Terminal Utilities
-      "bottom"                      # System/Process monitor
-      "btop"                        # Modern resource monitor (replaces htop)
-      "glow"                        # Markdown viewer
-      "neofetch"                    # System information tool
-      "starship"                    # Cross-shell prompt
-      "tldr"                        # Simplified man pages
-      "tmux"                        # Terminal multiplexer
+        # Other Programming Languages & their Tools
+        "go"                          # Go programming language
+        "rustup"                      # Rust toolchain manager
+        "lua"                         # Lua programming language
+        "luarocks"                    # Lua package manager
+        "ruby"                        # Ruby programming language
+        "composer"                    # PHP dependency manager
+        "php"                         # PHP programming language
+        "julia"                       # Julia programming language
+        "zsh"                         # Z shell
 
-      # Security
-      "gnupg"                       # OpenPGP implementation
+        # Development Tools
+        # These versions are preferred over Nix for various reasons
+        "cmake"                       # Build system
+        "pkg-config"                  # Development tool
+        "git"                         # Version control
+        "gh"                          # GitHub CLI
+        "git-lfs"                     # Git large file storage
+        "lazygit"                     # Terminal UI for git
+        "node"                        # Node.js (includes npm and npx)
+        "deno"                        # Secure JavaScript runtime
+        "neovim"                      # Modern text editor
 
-      # Cloud and Infrastructure Tools
-      "awscli"                      # AWS CLI
-      "terraform-docs"              # Terraform documentation
-      "tflint"                      # Terraform linter
-      "warrensbox/tap/tfswitch"     # Terraform version manager
-    ];
+        # Text Processing and Search
+        "bat"                         # Modern cat with syntax highlighting
+        "fzf"                         # Fuzzy finder
+        "jq"                          # JSON processor
+        "ripgrep"                     # Fast grep alternative
+        "yq"                          # YAML processor
 
-    # GUI Applications (Casks)
-    casks = [
-      # Communication
-      "discord"                     # Move from configuration.nix
+        # Terminal Utilities
+        "bottom"                      # System/Process monitor
+        "btop"                        # Modern resource monitor (replaces htop)
+        "glow"                        # Markdown viewer
+        "neofetch"                    # System information tool
+        "starship"                    # Cross-shell prompt
+        "tldr"                        # Simplified man pages
+        "tmux"                        # Terminal multiplexer
 
       # Cloud Tools
       "google-cloud-sdk"            # Google Cloud Platform SDK
@@ -208,24 +222,62 @@ in {
       "obsidian"                       # Knowledge base and note-taking
       "spotify"                        # Music streaming
       "slack"                          # Messaging
+        # Security
+        "gnupg"                       # OpenPGP implementation
 
-      # Media
-      "vlc"                            # Media player
+        # Cloud and Infrastructure Tools
+        "awscli"                      # AWS CLI
+        "terraform-docs"              # Terraform documentation
+        "tflint"                      # Terraform linter
+        "warrensbox/tap/tfswitch"     # Terraform version manager
+        ];
 
-      # Fonts
-      "font-space-mono-nerd-font"      # original fixed-width type family
-      "font-fira-code-nerd-font"       # monospaced font with programming ligatures
-      "font-maple-mono"                # open source monospace font, smoothing your coding flow
-    ];
+        # GUI Applications (Casks)
+        casks = [
+        # Communication
+        "discord"                     # Move from configuration.nix
 
-    # Global options
-    global = {
-      autoUpdate = true;
-      brewfile = true;
-      lockfiles = true;
+        # Cloud Tools
+        "google-cloud-sdk"           # Google Cloud Platform SDK
+
+        # Development Tools
+        "docker"
+        "postman"                         # API testing tool
+
+        # Terminal and System Tools
+        # Conditionally include terminal emulators based on user preference
+        ] ++ lib.optional (preferredTerminal == "alacritty") "alacritty" # GPU-accelerated terminal
+        ++ lib.optional (preferredTerminal == "ghostty") "ghostty" # Fast, native, feature-rich terminal
+        ++ [
+        "karabiner-elements"                                             # Keyboard customization
+        "rectangle"                                                      # Window management
+        "the-unarchiver"                                                 # Archive extraction
+
+        # Productivity and Communication
+        "1password"                      # Password manager
+        "google-chrome"                  # Web browser
+        "claude"                         # Claude AI desktop app
+        "insync"                         # Google Drive client
+        "spotify"                        # Music streaming
+        "slack"                          # Messaging
+
+        # Media
+        "vlc"                            # Media player
+
+        # Fonts
+        "font-space-mono-nerd-font"      # original fixed-width type family
+        "font-fira-code-nerd-font"       # monospaced font with programming ligatures
+        "font-maple-mono"                # open source monospace font, smoothing your coding flow
+        ];
+
+        # Global options
+        global = {
+        autoUpdate = true;
+        brewfile = true;
+        lockfiles = true;
+        };
+
+        # Mac App Store apps
+        masApps = {};
     };
-
-    # Mac App Store apps
-    masApps = {};
-  };
 }

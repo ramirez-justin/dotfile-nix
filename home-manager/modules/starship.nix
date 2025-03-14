@@ -21,28 +21,32 @@
       "$schema" = "https://starship.rs/config-schema.json";
 
       format = ''
-        [](color_orange)$os$username[](bg:color_yellow fg:color_orange)$directory[](fg:color_yellow bg:color_aqua)$git_branch$git_status[](fg:color_aqua bg:color_blue)$c$rust$golang$nodejs$php$java$kotlin$haskell$python[](fg:color_blue bg:color_bg3)$docker_context$conda[](fg:color_bg3 bg:color_bg1)[ ](fg:color_bg1)$line_break$character'';
+        [](color_dwn_rose)$os$username[](bg:color_dwn_pine fg:color_dwn_rose)$directory[](fg:color_dwn_pine bg:color_dwn_gold)$git_branch$git_status[](fg:color_dwn_gold bg:color_dwn_iris)$c$rust$golang$nodejs$php$java$kotlin$haskell$python[](fg:color_dwn_iris bg:color_dwn_foam)$docker_context$conda[](fg:color_dwn_foam bg:color_dwn_rosee)[ ](fg:color_surface)$line_break$character'';
 
       palette = "rose_pine";
 
       palettes = {
         rose_pine = {
-          color_fg0 = "#e0def4";      # Text
-          color_bg1 = "#1f1d2e";      # Surface
-          color_bg3 = "#26233a";      # Overlay
-          color_blue = "#31748f";     # Pine
-          color_aqua = "#9ccfd8";     # Foam
-          color_green = "#ebbcba";    # Rose
-          color_orange = "#f6c177";   # Gold
-          color_purple = "#c4a7e7";   # Iris
-          color_red = "#eb6f92";      # Love
-          color_yellow = "#f6c177";   # Gold
+          color_text = "#e0def4";      # Text
+          color_surface = "#191724";   # Surface
+          color_overlay = "#26233a";   # Overlay
+          color_rose = "#ebbcba";      # Rose
+          color_dwn_rose = "#d7827e";  # Dawn Rose
+          color_foam = "#9ccfd8";      # Foam
+          color_dwn_foam = "#56949f";   # Dawn Foam
+          color_pine = "#31748f";      # Pine
+          color_dwn_pine = "#286983";  # Dawn Pine
+          color_gold = "#f6c177";      # Gold
+          color_dwn_gold = "#ea9d34";  # Dawn Gold
+          color_iris = "#c4a7e7";      # Iris
+          color_dwn_iris = "#907aa9";  # Dawn Iris
+          color_love = "#eb6f92";      # Love
         };
       };
 
       os = {
         disabled = false;
-        style = "bg:color_orange fg:color_fg0";
+        style = "bg:color_dwn_rose fg:color_text";
         symbols = {
           Windows = "󰍲";
           Ubuntu = "󰕈";
@@ -70,17 +74,17 @@
 
       username = {
         show_always = true;
-        style_user = "bg:color_orange fg:color_fg0";  # Rose Pine Gold
-        style_root = "bg:color_orange fg:color_fg0";  # Rose Pine Gold
+        style_user = "bg:color_dwn_rose fg:color_text";  # Rose Pine Gold
+        style_root = "bg:color_dwn_rose fg:color_text";  # Rose Pine Gold
         format = "[ $user ]($style)";
       };
 
       directory = {
-        style = "fg:color_fg0 bg:color_yellow";  # Rose Pine Gold
+        style = "fg:color_text bg:color_dwn_pine";
         format = "[ $path ]($style)";
         truncation_length = 3;
         truncation_symbol = "…/";
-        substitutions = {  # Rose Pine substitutions for text to icons
+        substitutions = {
           "Documents" = "󰈙 ";
           "Downloads" = " ";
           "Music" = "󰝚 ";
@@ -91,85 +95,85 @@
 
       git_branch = {
         symbol = "";
-        style = "bg:color_aqua";  # Rose Pine Foam
-        format = "[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)";
+        style = "bg:color_dwn_gold";
+        format = "[[ $symbol $branch ](fg:color_text bg:color_dwn_gold)]($style)";
       };
 
       git_status = {
-        style = "bg:color_aqua"; # Rose Pine Foam
-        format = "[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)";
+        style = "bg:color_dwn_gold";
+        format = "[[($all_status$ahead_behind )](fg:color_text bg:color_dwn_gold)]($style)";
       };
 
       nodejs = {
         symbol = "";
-        style = "bg:color_blue"; # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris";
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       c = {
         symbol = "";
-        style = "bg:color_blue"; # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris"; # Rose Pine Pine
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       rust = {
         symbol = "";
-        style = "bg:color_blue";  # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris";  # Rose Pine Pine
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       golang = {
         symbol = "";
-        style = "bg:color_blue";  # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris";  # Rose Pine Pine
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       php = {
         symbol = "";
-        style = "bg:color_blue";  # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris";  # Rose Pine Pine
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       java = {
         symbol = "";
-        style = "bg:color_blue";  # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris";  # Rose Pine Pine
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       kotlin = {
         symbol = "";
-        style = "bg:color_blue";  # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris";  # Rose Pine Pine
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       haskell = {
         symbol = "";
-        style = "bg:color_blue"; # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris"; # Rose Pine Pine
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       python = {
         symbol = "";
-        style = "bg:color_blue";  # Rose Pine Pine
-        format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+        style = "bg:color_dwn_iris";  # Rose Pine Pine
+        format = "[[ $symbol( $version) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       docker_context = {
         symbol = "";
-        style = "bg:color_bg3";  # Rose Pine Overlay
-        format = "[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)";
+        style = "bg:color_dwn_iris";  # Rose Pine Overlay
+        format = "[[ $symbol( $context) ](fg:#83a598 bg:color_dwn_iris)]($style)";
       };
 
       conda = {
-        style = "bg:color_bg3";  # Rose Pine Overlay
-        format = "[[ $symbol( $environment) ](fg:color_aqua bg:color_bg3)]($style)";
+        style = "bg:color_dwn_iris";  # Rose Pine Overlay
+        format = "[[ $symbol( $environment) ](fg:color_text bg:color_dwn_iris)]($style)";
       };
 
       time = {
         disabled = false;
         time_format = "%R";
-        style = "bg:color_bg1";  # Rose Pine Surface
-        format = "[[  $time ](fg:color_fg0 bg:color_bg1)]($style)";
+        style = "bg:color_dwn_gold";  # Rose Pine Surface
+        format = "[[  $time ](fg:color_text bg:color_dwn_gold)]($style)";
       };
 
       line_break = {
@@ -178,12 +182,12 @@
 
       character = {
         disabled = false;
-        success_symbol = "[](bold fg:color_green)";  # Rose Pine Rose
-        error_symbol = "[](bold fg:color_red)";  # Rose Pine Love
-        vimcmd_symbol = "[](bold fg:color_green)";  # Rose Pine Rose
-        vimcmd_replace_one_symbol = "[](bold fg:color_purple)";  # Rose Pine Iris
-        vimcmd_replace_symbol = "[](bold fg:color_purple)";  # Rose Pine Iris
-        vimcmd_visual_symbol = "[](bold fg:color_yellow)";  # Rose Pine Gold
+        success_symbol = "[](bold fg:color_pine)";  # Rose Pine Rose
+        error_symbol = "[](bold fg:color_love)";  # Rose Pine Love
+        vimcmd_symbol = "[](bold fg:color_pine)";  # Rose Pine Rose
+        vimcmd_replace_one_symbol = "[](bold fg:color_iris)";  # Rose Pine Iris
+        vimcmd_replace_symbol = "[](bold fg:color_iris)";  # Rose Pine Iris
+        vimcmd_visual_symbol = "[](bold fg:color_gold)";  # Rose Pine Gold
       };
     };
   };
