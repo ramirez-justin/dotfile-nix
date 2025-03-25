@@ -26,7 +26,7 @@
 in {
   programs.git = {
     enable = true;
-    
+
     # User Identity
     # Used for commit authorship
     userName = fullName;
