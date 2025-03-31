@@ -315,7 +315,7 @@
 
             # Set Java 11 as the default version
             # Required for most current applications
-            if sdk current java 2>/dev/null | grep -q "11.0.21-amzn"; then
+            if sdk current java 2>/dev/null | grep "11.0.21-amzn"; then
                 echo "Java 11 is already default"
             else
                 echo "Setting Java 11 as default"
@@ -330,7 +330,7 @@
         # Poetry Package Manager Setup
         # Install specific version for compatibility
         POETRY_PATH="$HOME/.local/bin/poetry"
-        if [ ! -f "$POETRY_PATH" ] || ! "$POETRY_PATH" --version | grep -q "1.5.1"; then
+        if [ ! -f "$POETRY_PATH" ] || ! "$POETRY_PATH" --version | grep "1.5.1"; then
             echo "Installing Poetry 1.5.1..."
             # Add both Homebrew and local bin to PATH
             export PATH="/opt/homebrew/bin:$HOME/.local/bin:$PATH"
@@ -356,58 +356,71 @@
         export PATH="${pkgs.pyenv}/bin:$PATH"
 
         if command -v pyenv &> /dev/null; then
-        echo "Setting up Python versions..."
-        # Initialize pyenv directory
-        mkdir -p "$PYENV_ROOT"
-        eval "$(pyenv init -)"
+            echo "Setting up Python versions..."
+            # Initialize pyenv directory
+            mkdir -p "$PYENV_ROOT"
 
-        # First check if any Python is already installed
-        if command -v python3 &> /dev/null; then
-            PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
-            echo "Python $PYTHON_VERSION is already installed on the system"
-        else
-            # Python Version Installation Helper
-            # Function to install Python version if not already installed
-            install_python_version() {
-                # Check if any version that starts with the given prefix exists
-                if ! pyenv versions | grep -q "^[*[:space:]]*$1"; then
-                    echo "Installing Python $1"
-                    # Use -s flag to skip if version exists
-                    pyenv install -s "$1" || true
-                else
-                    echo "Python $1 is already installed"
-                fi
-            }
+            # Temporarily remove any existing .python-version file that might interfere
+            if [ -f "$HOME/.python-version" ]; then
+                echo "Found existing .python-version file, temporarily moving it"
+                mv "$HOME/.python-version" "$HOME/.python-version.bak"
+            fi
 
-            # Python Version Management
-            # Install and configure specific Python versions
-            # install_python_version "3.10"      # Primary development version
-            # Add more versions as needed:
-            # install_python_version "3.9"     # Legacy support
-            install_python_version "3.11"    # Latest features
-        fi
+            # Initialize pyenv
+            eval "$(pyenv init -)"
 
-        # Set Global Python Version if pyenv has any versions
-        if pyenv versions | grep -q "3\."; then
-            echo "Setting Python 3.11 as global Python version"
-            pyenv global 3.11
-        fi
+            # First check if any Python is already installed
+            if command -v python3 &> /dev/null; then
+                PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
+                echo "Python $PYTHON_VERSION is already installed on the system"
+            else
+                # Python Version Installation Helper
+                # Function to install Python version if not already installed
 
-        # Check if the virtual environment already exists
-        if pyenv virtualenvs | grep -q nvim-python; then
-            echo "Virtual environment 'nvim-python' already exists."
-            echo "Removing existing environment to create a fresh one..."
-            pyenv virtualenv-delete -f nvim-python
-        fi
+                install_python_version() {
+                    # Check if any version that starts with the given prefix exists
+                    if ! pyenv versions | grep "^[*[:space:]]*$1"; then
+                        echo "Installing Python $1"
+                        # Use -s flag to skip if version exists
+                        pyenv install -s "$1" || true
+                    else
+                        echo "Python $1 is already installed"
+                    fi
+                }
 
-        # Create a new virtual environment using pyenv
-        # This uses the current pyenv global Python version
-        echo "Creating new virtual environment 'nvim-python'..."
-        pyenv virtualenv nvim-python
+                # Python Version Management
+                # Install and configure specific Python versions
+                # install_python_version "3.10"      # Primary development version
+                # Add more versions as needed:
+                # install_python_version "3.9"     # Legacy support
+                install_python_version "3.11"    # Latest features
+            fi
 
-        # Activate the virtual environment
-        echo "Activating virtual environment..."
-        pyenv activate nvim-python
+            # Set Global Python Version if pyenv has any versions
+            if pyenv versions | grep "3\."; then
+                echo "Setting Python 3.11 as global Python version"
+                pyenv global 3.11
+            fi
+
+            # Check if the virtual environment already exists
+            if pyenv virtualenvs | grep "nvim_python3"; then
+                echo "Virtual environment 'nvim_python3' already exists."
+                echo "Removing existing environment to create a fresh one..."
+                pyenv virtualenv-delete -f nvim_python3 || true
+            fi
+
+            # Create a new virtual environment using pyenv
+            # This uses the current pyenv global Python version
+            echo "Creating new virtual environment 'nvim_python3'..."
+            if ! pyenv virtualenvs | grep "nvim_python3"; then
+                pyenv virtualenv 3.11 nvim_python3
+            else
+                echo "Using existing 'nvim_python3' environment"
+            fi
+
+            # Activate the virtual environment
+            echo "Activating virtual environment..."
+            pyenv activate nvim_python3
 
         # Upgrade pip
         echo "Upgrading pip..."
@@ -446,15 +459,21 @@
 
         # Register the kernel for Jupyter
         echo "Registering Jupyter kernel..."
-        python -m ipykernel install --user --name=nvim-python --display-name="Python (nvim-python)"
+        python -m ipykernel install --user --name=nvim_python3 --display-name="Python (nvim_python3)"
 
         # Deactivate the virtual environment
         pyenv deactivate
 
+        # Restore the original .python-version file if it existed
+        if [ -f "$HOME/.python-version.bak" ]; then
+            echo "Restoring original .python-version file"
+            mv "$HOME/.python-version.bak" "$HOME/.python-version"
+        fi
+
         # Print notices
-        echo "Virtual environment 'nvim-python' has been set up successfully!"
-        echo "To activate: pyenv activate nvim-python"
-        echo "To set as local Python for a project: pyenv local nvim-python"
+        echo "Virtual environment 'nvim_python3' has been set up successfully!"
+        echo "To activate: pyenv activate nvim_python3"
+        echo "To set as local Python for a project: pyenv local nvim_python3"
     else
         # Installation Error Handling
         echo "pyenv not found. Please ensure it's installed via Nix"

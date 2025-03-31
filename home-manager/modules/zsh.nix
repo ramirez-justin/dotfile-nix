@@ -94,9 +94,9 @@
             eval "$(pyenv virtualenv-init -)"
         fi
 
-        # Activate nvim-python
-        if pyenv virtualenvs | grep -q nvim-python; then
-            pyenv activate nvim-python
+        # Activate nvim_python3
+        if pyenv virtualenvs | grep -q nvim_python3; then
+            pyenv activate nvim_python3
         fi
 
         # Ensure poetry is in PATH
