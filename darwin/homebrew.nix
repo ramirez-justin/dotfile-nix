@@ -89,23 +89,6 @@ in {
 
     # Handle existing Homebrew installations
     autoMigrate = true;
-  };
-
-  # Homebrew packages configuration
-  homebrew = {
-    enable = true;
-
-    # Configure taps
-    taps = [
-      "homebrew/bundle"     # For Brewfile support
-      "warrensbox/tap"      # For tfswitch
-    ];
-
-    onActivation = {
-      autoUpdate = true;
-      upgrade = true;
-      # Remove old versions
-      cleanup = "zap";      # More aggressive cleanup
     };
 
     # Homebrew packages configuration
@@ -125,18 +108,7 @@ in {
             cleanup = "zap";      # More aggressive cleanup
         };
 
-      # Development Tools
-      # These versions are preferred over Nix for various reasons
-      "cmake"                       # Build system
-      "neovim"                      # Modern vim implementation
-      "pkg-config"                  # Development tool
-      "git"                         # Version control
-      "gh"                          # GitHub CLI
-      "git-lfs"                     # Git large file storage
-      "lazygit"                     # Terminal UI for git
-      "node"                        # Node.js (includes npm and npx)
-      "deno"                        # Secure JavaScript runtime
-      "neovim"                      # Modern text editor
+
         # CLI Tools
         brews = [
             # Core System Utilities
@@ -196,34 +168,8 @@ in {
             "tldr"                        # Simplified man pages
             "tmux"                        # Terminal multiplexer
 
-      # Cloud Tools
-      "google-cloud-sdk"            # Google Cloud Platform SDK
-      
-      # Development Tools
-      "docker"
-      "jetbrains-toolbox"              # JetBrains IDE manager
-      "postman"                        # API testing tool
-      "visual-studio-code"             # Code editor
-      
-      # Terminal and System Tools
-      # Conditionally include terminal emulators based on user preference
-      ] ++ lib.optional (preferredTerminal == "alacritty") "alacritty" # GPU-accelerated terminal
-      ++ lib.optional (preferredTerminal == "ghostty") "ghostty" # Fast, native, feature-rich terminal
-      ++ [
-      "karabiner-elements"                                             # Keyboard customization
-      "rectangle"                                                      # Window management
-      "the-unarchiver"                                                 # Archive extraction
-
-      # Productivity and Communication
-      "1password"                      # Password manager
-      "google-chrome"                  # Web browser
-      "claude"                         # Claude AI desktop app
-      "insync"                         # Google Drive client
-      "obsidian"                       # Knowledge base and note-taking
-      "spotify"                        # Music streaming
-      "slack"                          # Messaging
-        # Security
-        "gnupg"                       # OpenPGP implementation
+            # Security
+            "gnupg"                       # OpenPGP implementation
 
             # Cloud and Infrastructure Tools
             "awscli"                      # AWS CLI

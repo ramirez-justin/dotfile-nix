@@ -215,13 +215,19 @@
             enable = true;
             enableCompletion = true;
             promptInit = "";
+            shellInit = ''
+                autoload -U promptinit; promptinit
+            '';
             interactiveShellInit = ''
-              export PATH="$HOME/Library/Application Support/pypoetry/venv/bin:$PATH"
-              export PATH="$HOME/.local/bin:$PATH"
-              export PATH="/Applications/Julia-1.9.app/Contents/Resources/julia/bin:$PATH"
-              if [ -f "$HOME/.cargo/env" ]; then
-                source "$HOME/.cargo/env"
-              fi
+                export PATH="$HOME/Library/Application Support/pypoetry/venv/bin:$PATH"
+                export PATH="$HOME/.local/bin:$PATH"
+                export PATH="/Applications/Julia-1.9.app/Contents/Resources/julia/bin:$PATH"
+                if [ -f "$HOME/.cargo/env" ]; then
+                    source "$HOME/.cargo/env"
+                fi
+                source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
+                source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+                source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
             '';
           };
 

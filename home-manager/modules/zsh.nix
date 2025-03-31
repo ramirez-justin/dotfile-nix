@@ -211,58 +211,63 @@
         # CTRL-G for git status
         bindkey '^G' fzf-git-status
         '';
-        # TODO: move to aliases.nix
-        shellAliases = {
-            zshconfig="nv ~/.zshrc";
-            ohmyzsh="cd ~/.oh-my-zsh";
-            awscli_mfa="/bin/bash ~/gametime/guide/scripts/awscli_mfa/awscli_mfa.sh";
-            nv="nvim";
-            jlab="jupyter lab";
-            lg="lazygit";
-            setup_dbt="set -a; source ~/gametime/airflow/.env; set +a";
-            gstart="git checkout main && git pull && git checkout -b";
-            ghosttyconfig="nv ~/.config/ghostty/config";
-        };
 
         oh-my-zsh = {
-        enable = true;
-        # Core functionality plugins
-        plugins = [
-            "git"
-            "git-extras"
-            "docker"
-            "docker-compose"
-            "extract"
-            "mosh"
-            "timer"
-            "terraform"
-            "homebrew"
-        ];
-        theme = "agnoster";
+            enable = true;
+            # Core functionality plugins
+            plugins = [
+                "git"
+                "git-extras"
+                "docker"
+                "docker-compose"
+                "extract"
+                "mosh"
+                "timer"
+                "terraform"
+                "brew"
+                "1password"
+            ];
+            theme = "agnoster";
         };
 
         # Additional ZSH plugins
         plugins = [
-        {
-            # Command auto-completion suggestions
-            name = "zsh-autosuggestions";
-            src = pkgs.fetchFromGitHub {
-            owner = "zsh-users";
-            repo = "zsh-autosuggestions";
-            rev = "v0.7.0";
-            sha256 = "sha256-KLUYpUu4DHRumQZ3w59m9aTW6TBKMCXl2UcKi4uMd7w=";
-            };
-        }
-        {
-            # Syntax highlighting for commands
-            name = "zsh-syntax-highlighting";
-            src = pkgs.fetchFromGitHub {
-            owner = "zsh-users";
-            repo = "zsh-syntax-highlighting";
-            rev = "0.7.1";
-            sha256 = "sha256-gOG0NLlaJfotJfs+SUhGgLTNOnGLjoqnUp54V9aFJg8=";
-            };
-        }
+            {
+                # Command auto-completion suggestions
+                name = "zsh-autosuggestions";
+                src = pkgs.fetchFromGitHub {
+                    owner = "zsh-users";
+                    repo = "zsh-autosuggestions";
+                    rev = "v0.7.0";
+                    sha256 = "sha256-KLUYpUu4DHRumQZ3w59m9aTW6TBKMCXl2UcKi4uMd7w=";
+                };
+            }
+            {
+                # Syntax highlighting for commands
+                name = "zsh-syntax-highlighting";
+                src = pkgs.fetchFromGitHub {
+                    owner = "zsh-users";
+                    repo = "zsh-syntax-highlighting";
+                    rev = "0.7.1";
+                    sha256 = "sha256-gOG0NLlaJfotJfs+SUhGgLTNOnGLjoqnUp54V9aFJg8=";
+                };
+            }
+            {
+                name = "nix-shell";
+                src = "${pkgs.zsh-nix-shell}/share/zsh-nix-shell";
+            }
+            {
+                name = "you-should-use";
+                src = "${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use";
+            }
+            {
+                name = "zsh-vi-mode";
+                src = "${pkgs.zsh-vi-mode}/share/zsh-vi-mode";
+            }
+            {
+                name = "zsh-z";
+                src = "${pkgs.zsh-z}/share/zsh-z";
+            }
         ];
     };
 
