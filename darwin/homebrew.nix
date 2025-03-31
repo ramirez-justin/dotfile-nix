@@ -114,15 +114,15 @@ in {
 
         # Configure taps
         taps = [
-        "homebrew/bundle"
-        "warrensbox/tap"      # For tfswitch
+            "homebrew/bundle"
+            "warrensbox/tap"      # For tfswitch
         ];
 
         onActivation = {
-        autoUpdate = true;
-        upgrade = true;
-        # Remove old versions
-        cleanup = "zap";      # More aggressive cleanup
+            autoUpdate = true;
+            upgrade = true;
+            # Remove old versions
+            cleanup = "zap";      # More aggressive cleanup
         };
 
       # Development Tools
@@ -139,62 +139,62 @@ in {
       "neovim"                      # Modern text editor
         # CLI Tools
         brews = [
-        # Core System Utilities
-        # These are installed via Homebrew for macOS-specific optimizations
-        "coreutils"                   # GNU core utilities
-        "duf"                         # Disk usage/free utility
-        "dust"                        # More intuitive du
-        "eza"                         # Modern ls replacement
-        "fd"                          # Simple find alternative
-        "mas"                         # Mac App Store CLI
-        "stow"                        # Symlink farm manager
-        "zoxide"                      # Smarter cd command
+            # Core System Utilities
+            # These are installed via Homebrew for macOS-specific optimizations
+            "coreutils"                   # GNU core utilities
+            "duf"                         # Disk usage/free utility
+            "dust"                        # More intuitive du
+            "eza"                         # Modern ls replacement
+            "fd"                          # Simple find alternative
+            "mas"                         # Mac App Store CLI
+            "stow"                        # Symlink farm manager
+            "zoxide"                      # Smarter cd command
 
-        # Python Development Environment
-        # Managed via Homebrew for better macOS integration
-        "pyenv"                       # Python version manager
-        "pyenv-virtualenv"            # Python virtual environments
-        "uv"                          # Python package manager
-        "pipx"                        # Python package manager
+            # Python Development Environment
+            # Managed via Homebrew for better macOS integration
+            "pyenv"                       # Python version manager
+            "pyenv-virtualenv"            # Python virtual environments
+            "uv"                          # Python package manager
+            "pipx"                        # Python package manager
 
-        # Other Programming Languages & their Tools
-        "go"                          # Go programming language
-        "rustup"                      # Rust toolchain manager
-        "lua"                         # Lua programming language
-        "luarocks"                    # Lua package manager
-        "ruby"                        # Ruby programming language
-        "composer"                    # PHP dependency manager
-        "php"                         # PHP programming language
-        "julia"                       # Julia programming language
-        "zsh"                         # Z shell
+            # Other Programming Languages & their Tools
+            "go"                          # Go programming language
+            "rustup"                      # Rust toolchain manager
+            "lua"                         # Lua programming language
+            "luarocks"                    # Lua package manager
+            "ruby"                        # Ruby programming language
+            "composer"                    # PHP dependency manager
+            "php"                         # PHP programming language
+            "julia"                       # Julia programming language
+            "zsh"                         # Z shell
 
-        # Development Tools
-        # These versions are preferred over Nix for various reasons
-        "cmake"                       # Build system
-        "pkg-config"                  # Development tool
-        "git"                         # Version control
-        "gh"                          # GitHub CLI
-        "git-lfs"                     # Git large file storage
-        "lazygit"                     # Terminal UI for git
-        "node"                        # Node.js (includes npm and npx)
-        "deno"                        # Secure JavaScript runtime
-        "neovim"                      # Modern text editor
+            # Development Tools
+            # These versions are preferred over Nix for various reasons
+            "cmake"                       # Build system
+            "pkg-config"                  # Development tool
+            "git"                         # Version control
+            "gh"                          # GitHub CLI
+            "git-lfs"                     # Git large file storage
+            "lazygit"                     # Terminal UI for git
+            "node"                        # Node.js (includes npm and npx)
+            "deno"                        # Secure JavaScript runtime
+            "neovim"                      # Modern text editor
 
-        # Text Processing and Search
-        "bat"                         # Modern cat with syntax highlighting
-        "fzf"                         # Fuzzy finder
-        "jq"                          # JSON processor
-        "ripgrep"                     # Fast grep alternative
-        "yq"                          # YAML processor
+            # Text Processing and Search
+            "bat"                         # Modern cat with syntax highlighting
+            "fzf"                         # Fuzzy finder
+            "jq"                          # JSON processor
+            "ripgrep"                     # Fast grep alternative
+            "yq"                          # YAML processor
 
-        # Terminal Utilities
-        "bottom"                      # System/Process monitor
-        "btop"                        # Modern resource monitor (replaces htop)
-        "glow"                        # Markdown viewer
-        "neofetch"                    # System information tool
-        "starship"                    # Cross-shell prompt
-        "tldr"                        # Simplified man pages
-        "tmux"                        # Terminal multiplexer
+            # Terminal Utilities
+            "bottom"                      # System/Process monitor
+            "btop"                        # Modern resource monitor (replaces htop)
+            "glow"                        # Markdown viewer
+            "neofetch"                    # System information tool
+            "starship"                    # Cross-shell prompt
+            "tldr"                        # Simplified man pages
+            "tmux"                        # Terminal multiplexer
 
       # Cloud Tools
       "google-cloud-sdk"            # Google Cloud Platform SDK
@@ -225,56 +225,57 @@ in {
         # Security
         "gnupg"                       # OpenPGP implementation
 
-        # Cloud and Infrastructure Tools
-        "awscli"                      # AWS CLI
-        "terraform-docs"              # Terraform documentation
-        "tflint"                      # Terraform linter
-        "warrensbox/tap/tfswitch"     # Terraform version manager
+            # Cloud and Infrastructure Tools
+            "awscli"                      # AWS CLI
+            "terraform-docs"              # Terraform documentation
+            "tflint"                      # Terraform linter
+            "warrensbox/tap/tfswitch"     # Terraform version manager
         ];
 
         # GUI Applications (Casks)
         casks = [
-        # Communication
-        "discord"                     # Move from configuration.nix
+            # Communication
+            "discord"                     # Move from configuration.nix
 
-        # Cloud Tools
-        "google-cloud-sdk"           # Google Cloud Platform SDK
+            # Cloud Tools
+            "google-cloud-sdk"           # Google Cloud Platform SDK
 
-        # Development Tools
-        "docker"
-        "postman"                         # API testing tool
+            # Development Tools
+            "docker"
+            "postman"                         # API testing tool
 
-        # Terminal and System Tools
-        # Conditionally include terminal emulators based on user preference
-        ] ++ lib.optional (preferredTerminal == "alacritty") "alacritty" # GPU-accelerated terminal
+            # Terminal and System Tools
+            # Conditionally include terminal emulators based on user preference
+        ]
+        ++ lib.optional (preferredTerminal == "alacritty") "alacritty" # GPU-accelerated terminal
         ++ lib.optional (preferredTerminal == "ghostty") "ghostty" # Fast, native, feature-rich terminal
         ++ [
-        "karabiner-elements"                                             # Keyboard customization
-        "rectangle"                                                      # Window management
-        "the-unarchiver"                                                 # Archive extraction
+            "karabiner-elements"                                             # Keyboard customization
+            "rectangle"                                                      # Window management
+            "the-unarchiver"                                                 # Archive extraction
 
-        # Productivity and Communication
-        "1password"                      # Password manager
-        "google-chrome"                  # Web browser
-        "claude"                         # Claude AI desktop app
-        "insync"                         # Google Drive client
-        "spotify"                        # Music streaming
-        "slack"                          # Messaging
+            # Productivity and Communication
+            "1password"                      # Password manager
+            "google-chrome"                  # Web browser
+            "claude"                         # Claude AI desktop app
+            "insync"                         # Google Drive client
+            "spotify"                        # Music streaming
+            "slack"                          # Messaging
 
-        # Media
-        "vlc"                            # Media player
+            # Media
+            "vlc"                            # Media player
 
-        # Fonts
-        "font-space-mono-nerd-font"      # original fixed-width type family
-        "font-fira-code-nerd-font"       # monospaced font with programming ligatures
-        "font-maple-mono"                # open source monospace font, smoothing your coding flow
+            # Fonts
+            "font-space-mono-nerd-font"      # original fixed-width type family
+            "font-fira-code-nerd-font"       # monospaced font with programming ligatures
+            "font-maple-mono"                # open source monospace font, smoothing your coding flow
         ];
 
         # Global options
         global = {
-        autoUpdate = true;
-        brewfile = true;
-        lockfiles = true;
+            autoUpdate = true;
+            brewfile = true;
+            lockfiles = true;
         };
 
         # Mac App Store apps
