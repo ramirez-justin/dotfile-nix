@@ -161,7 +161,6 @@ The repository is organized into logical components:
 │   │   │   └── default.nix      # Module definition
 │   │   ├── lazygit.nix          # Git TUI configuration
 │   │   ├── rectangle.nix        # Window management
-│   │   ├── starship.nix         # Shell prompt
 │   │   ├── tmux.nix             # Terminal multiplexer
 │   │   └── zsh.nix              # Shell configuration
 │   └── shell.nix                # Shell environment

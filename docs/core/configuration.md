@@ -44,7 +44,7 @@ System-level configurations affect the entire macOS system and all users. These 
      homebrew = {
        enable = true;
        onActivation.autoUpdate = true;
-       brews = [ "git" "starship" ];
+       brews = [ "git" ];
        casks = [ "alacritty" "brave-browser" ];
      };
    }

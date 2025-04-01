@@ -17,7 +17,6 @@
 # Tool initializations:
 # - SDKMAN for Java version management
 # - pyenv for Python version management
-# - Starship prompt with Gruvbox theme
 #
 # Features:
 # - Oh My Zsh integration with plugins
@@ -70,146 +69,146 @@
 
         # Add environment variables
         sessionVariables = {
-        # Ensure all necessary paths are available
-        PATH = "$HOME/.local/bin:$HOME/Library/Application Support/pypoetry/venv/bin:$PATH";
-        NIX_PATH = "$HOME/.nix-defexpr/channels:$NIX_PATH";
-        FPATH = "$HOME/.zsh/completion:$FPATH";
+            # Ensure all necessary paths are available
+            PATH = "$HOME/.local/bin:$HOME/Library/Application Support/pypoetry/venv/bin:$PATH";
+            NIX_PATH = "$HOME/.nix-defexpr/channels:$NIX_PATH";
+            FPATH = "$HOME/.zsh/completion:$FPATH";
+            ANTHROPIC_API_KEY = "op://dev_vault/ANTHROPIC_API_KEY/credential";
+            KAGI_API_KEY = "op://dev_vault/KAGI_API_KEY/credential";
         };
 
         initExtra = ''
-        # Starship prompt configured via starship.nix
-
-        # Development Tools Setup
-        # Initialize SDKMAN if installed
-        if [ -d "$HOME/.sdkman" ]; then
-            export SDKMAN_DIR="$HOME/.sdkman"
-            [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-        fi
-
-        # Initialize pyenv
-        if command -v pyenv &> /dev/null; then
-            export PYENV_ROOT="$HOME/.pyenv"
-            [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-            eval "$(pyenv init - zsh)"
-            eval "$(pyenv virtualenv-init -)"
-        fi
-
-        # Activate nvim_python3
-        if pyenv virtualenvs | grep -q nvim_python3; then
-            pyenv activate nvim_python3
-        fi
-
-        # Ensure poetry is in PATH
-        if [ -d "$HOME/.local/bin" ]; then
-            export PATH="$HOME/.local/bin:$PATH"
-        fi
-
-        if [ -d "$HOME/Library/Application Support/pypoetry/venv/bin" ]; then
-            export PATH="$HOME/Library/Application Support/pypoetry/venv/bin:$PATH"
-        fi
-
-        # Initialize zoxide
-        eval "$(zoxide init zsh)"
-
-        # FZF Integration Widgets
-        # Interactive git status with file preview
-        function fzf-git-status() {
-            local selections=$(
-            git status --porcelain | \
-            fzf --ansi \
-                --preview 'if [ -f {2} ]; then
-                            bat --color=always --style=numbers {2}
-                            elif [ -d {2} ]; then
-                            tree -C {2}
-                            fi' \
-                --preview-window right:70% \
-                --multi
-            )
-            if [ -n "$selections" ]; then
-            LBUFFER+="$(echo "$selections" | awk '{print $2}' | tr '\n' ' ')"
+            # Development Tools Setup
+            # Initialize SDKMAN if installed
+            if [ -d "$HOME/.sdkman" ]; then
+                export SDKMAN_DIR="$HOME/.sdkman"
+                [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
             fi
-            zle reset-prompt
-        }
-        zle -N fzf-git-status
 
-        # Directory navigation with hidden files
-        function fzf-cd-with-hidden() {
-            local dir
-            dir=$(find "''${1:-$PWD}" -type d 2> /dev/null | fzf +m) && cd "$dir"
-            zle reset-prompt
-        }
-        zle -N fzf-cd-with-hidden
-
-        # History and Directory Navigation
-        # Enable up/down arrow history search
-        autoload -U up-line-or-beginning-search
-        autoload -U down-line-or-beginning-search
-        zle -N up-line-or-beginning-search
-        zle -N down-line-or-beginning-search
-        # Enable directory history navigation
-        zle -N dirhistory_zle_dirhistory_up
-        zle -N dirhistory_zle_dirhistory_down
-
-        # Key Binding Configuration
-        # Word Navigation
-        # ALT-Left/Right for word navigation
-        bindkey "^[f" forward-word
-        bindkey "^[b" backward-word
-
-        # Word Deletion
-        # CTRL-Delete/Backspace for word deletion
-        bindkey "^[[3;5~" kill-word
-        bindkey "^H" backward-kill-word
-
-        # Line Editing
-        # CTRL-U clears line before cursor
-        bindkey "^U" backward-kill-line
-
-        # ALT-Backspace deletes word before cursor
-        bindkey "^[^?" backward-kill-word
-
-        # Cursor Movement
-        # CTRL-A/E for start/end of line (like in Emacs)
-        bindkey "^A" beginning-of-line
-        bindkey "^E" end-of-line
-
-        # Directory Navigation
-        # ALT-Up/Down for directory history
-        bindkey "^[[1;3A" dirhistory_zle_dirhistory_up
-        bindkey "^[[1;3B" dirhistory_zle_dirhistory_down
-
-        # FZF Enhanced Functions
-        # Directory navigation with preview
-        fzf-cd-with-hidden() {
-            local dir
-            dir=$(find "''${1:-$PWD}" -type d 2> /dev/null | fzf +m) && cd "$dir"
-        }
-
-        # Git status with preview
-        fzf-git-status() {
-            local selections=$(
-            git status --porcelain | \
-            fzf --ansi \
-                --preview 'if [ -f {2} ]; then
-                            bat --color=always --style=numbers {2}
-                            elif [ -d {2} ]; then
-                            tree -C {2}
-                            fi' \
-                --preview-window right:70% \
-                --multi
-            )
-            if [ -n "$selections" ]; then
-            echo "$selections" | awk '{print $2}' | tr '\n' ' '
+            # Initialize pyenv
+            if command -v pyenv &> /dev/null; then
+                export PYENV_ROOT="$HOME/.pyenv"
+                [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+                eval "$(pyenv init - zsh)"
+                eval "$(pyenv virtualenv-init -)"
             fi
-        }
 
-        # FZF Key Bindings
-        # CTRL-_ to open file in VSCode
-        bindkey -s '^_' 'code $(fzf)^M'
-        # ALT-d for directory navigation
-        bindkey "^[d" fzf-cd-with-hidden
-        # CTRL-G for git status
-        bindkey '^G' fzf-git-status
+            # Activate nvim_python3
+            if pyenv virtualenvs | grep -q nvim_python3; then
+                pyenv activate nvim_python3
+            fi
+
+            # Ensure poetry is in PATH
+            if [ -d "$HOME/.local/bin" ]; then
+                export PATH="$HOME/.local/bin:$PATH"
+            fi
+
+            if [ -d "$HOME/Library/Application Support/pypoetry/venv/bin" ]; then
+                export PATH="$HOME/Library/Application Support/pypoetry/venv/bin:$PATH"
+            fi
+
+            # Initialize zoxide
+            eval "$(zoxide init zsh)"
+
+            # FZF Integration Widgets
+            # Interactive git status with file preview
+            function fzf-git-status() {
+                local selections=$(
+                git status --porcelain | \
+                fzf --ansi \
+                    --preview 'if [ -f {2} ]; then
+                                bat --color=always --style=numbers {2}
+                                elif [ -d {2} ]; then
+                                tree -C {2}
+                                fi' \
+                    --preview-window right:70% \
+                    --multi
+                )
+                if [ -n "$selections" ]; then
+                LBUFFER+="$(echo "$selections" | awk '{print $2}' | tr '\n' ' ')"
+                fi
+                zle reset-prompt
+            }
+            zle -N fzf-git-status
+
+            # Directory navigation with hidden files
+            function fzf-cd-with-hidden() {
+                local dir
+                dir=$(find "''${1:-$PWD}" -type d 2> /dev/null | fzf +m) && cd "$dir"
+                zle reset-prompt
+            }
+            zle -N fzf-cd-with-hidden
+
+            # History and Directory Navigation
+            # Enable up/down arrow history search
+            autoload -U up-line-or-beginning-search
+            autoload -U down-line-or-beginning-search
+            zle -N up-line-or-beginning-search
+            zle -N down-line-or-beginning-search
+            # Enable directory history navigation
+            zle -N dirhistory_zle_dirhistory_up
+            zle -N dirhistory_zle_dirhistory_down
+
+            # Key Binding Configuration
+            # Word Navigation
+            # ALT-Left/Right for word navigation
+            bindkey "^[f" forward-word
+            bindkey "^[b" backward-word
+
+            # Word Deletion
+            # CTRL-Delete/Backspace for word deletion
+            bindkey "^[[3;5~" kill-word
+            bindkey "^H" backward-kill-word
+
+            # Line Editing
+            # CTRL-U clears line before cursor
+            bindkey "^U" backward-kill-line
+
+            # ALT-Backspace deletes word before cursor
+            bindkey "^[^?" backward-kill-word
+
+            # Cursor Movement
+            # CTRL-A/E for start/end of line (like in Emacs)
+            bindkey "^A" beginning-of-line
+            bindkey "^E" end-of-line
+
+            # Directory Navigation
+            # ALT-Up/Down for directory history
+            bindkey "^[[1;3A" dirhistory_zle_dirhistory_up
+            bindkey "^[[1;3B" dirhistory_zle_dirhistory_down
+
+            # FZF Enhanced Functions
+            # Directory navigation with preview
+            fzf-cd-with-hidden() {
+                local dir
+                dir=$(find "''${1:-$PWD}" -type d 2> /dev/null | fzf +m) && cd "$dir"
+            }
+
+            # Git status with preview
+            fzf-git-status() {
+                local selections=$(
+                git status --porcelain | \
+                fzf --ansi \
+                    --preview 'if [ -f {2} ]; then
+                                bat --color=always --style=numbers {2}
+                                elif [ -d {2} ]; then
+                                tree -C {2}
+                                fi' \
+                    --preview-window right:70% \
+                    --multi
+                )
+                if [ -n "$selections" ]; then
+                echo "$selections" | awk '{print $2}' | tr '\n' ' '
+                fi
+            }
+
+            # FZF Key Bindings
+            # CTRL-_ to open file in VSCode
+            bindkey -s '^_' 'code $(fzf)^M'
+            # ALT-d for directory navigation
+            bindkey "^[d" fzf-cd-with-hidden
+            # CTRL-G for git status
+            bindkey '^G' fzf-git-status
         '';
 
         oh-my-zsh = {
@@ -227,7 +226,7 @@
                 "brew"
                 "1password"
             ];
-            theme = "agnoster";
+            theme = "";
         };
 
         # Additional ZSH plugins
@@ -263,10 +262,6 @@
             {
                 name = "zsh-vi-mode";
                 src = "${pkgs.zsh-vi-mode}/share/zsh-vi-mode";
-            }
-            {
-                name = "zsh-z";
-                src = "${pkgs.zsh-z}/share/zsh-z";
             }
         ];
     };

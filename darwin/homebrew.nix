@@ -121,6 +121,7 @@ in {
             "mas"                         # Mac App Store CLI
             "stow"                        # Symlink farm manager
             "zoxide"                      # Smarter cd command
+            "spaceship"                   # minimalistic, powerful and extremely customizable Zsh prompt
 
             # Python Development Environment
             # Managed via Homebrew for better macOS integration
@@ -164,7 +165,6 @@ in {
             "btop"                        # Modern resource monitor (replaces htop)
             "glow"                        # Markdown viewer
             "neofetch"                    # System information tool
-            "starship"                    # Cross-shell prompt
             "tldr"                        # Simplified man pages
             "tmux"                        # Terminal multiplexer
 
@@ -202,6 +202,7 @@ in {
 
             # Productivity and Communication
             "1password"                      # Password manager
+            "1password-cli"                  # CLI for 1Password
             "google-chrome"                  # Web browser
             "claude"                         # Claude AI desktop app
             "insync"                         # Google Drive client

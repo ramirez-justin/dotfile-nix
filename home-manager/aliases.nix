@@ -306,50 +306,120 @@
         # System Update Commands
         # Quick System Rebuild
         # Rebuild system without updating flake
-        rebuild = "cd ${dotfileDir} && darwin-rebuild switch --flake .#\"$(hostname)\" --option max-jobs auto && cd -";
+        rebuild = "cd ${dotfileDir} && darwin-rebuild switch --flake .#\"$(hostname)\" --option max-jobs auto && cd $HOME";
 
         # Flake and system update management
         update = ''
-        # Update Nix Flake
-        echo "🔄 Updating Nix flake..." && \
-        cd ${dotfileDir} && \
-        nix --option max-jobs auto flake update && \
-        echo "🔄 Rebuilding system..." && rebuild && \
-        echo "✨ System update complete!"
+            # Update Nix Flake
+            echo "🔄 Updating Nix flake..." && \
+            cd ${dotfileDir} && \
+            nix --option max-jobs auto flake update && \
+            echo "🔄 Rebuilding system..." && rebuild && \
+            echo "✨ System update complete!"
         '';
         cleanup = ''
-        # Start cleanup process
-        echo "🧹 Running system cleanup..." && \
-        # Nix Garbage Collection
-        echo "🗑️  Running Nix garbage collection..." && \
-        if nix-collect-garbage -d --option max-jobs 6 --cores 2; then
-            echo "✓ Nix garbage collection complete"
-        else
-            echo "⚠️  Warning: Nix garbage collection failed"
-        fi && \
-
-        # macOS File Cleanup
-        echo "🧹 Cleaning .DS_Store files..." && \
-        find ${homeDir} -type f -name '.DS_Store' -delete 2>/dev/null || true && \
-        find ${homeDir} -type f -name '._*' -delete 2>/dev/null || true && \
-
-        # Node.js Cleanup
-        echo "🧹 Cleaning npm cache..." && \
-        if command -v npm &> /dev/null; then
-            npm cache clean --force 2>/dev/null || true
-            echo "✓ npm cache cleaned"
-        fi && \
-
-        # Clear global npm packages that aren't needed
-        echo "🧹 Cleaning unused global npm packages..." && \
-        if command -v npm &> /dev/null; then
-            unused_packages=$(npm list -g --depth=0 2>/dev/null | grep -v "npm@" | awk -F@ '/^[^ ]/ {print $1}' | tr -d ' ') && \
-            if [ -n "$unused_packages" ]; then
-            npm uninstall -g $unused_packages 2>/dev/null
-            echo "✓ Unused global npm packages removed"
+            # Start cleanup process
+            echo "🧹 Running system cleanup..." && \
+            # Nix Garbage Collection
+            echo "🗑️  Running Nix garbage collection..." && \
+            if nix-collect-garbage -d --option max-jobs 6 --cores 2; then
+                echo "✓ Nix garbage collection complete"
             else
-            echo "No unused global npm packages found"
+                echo "⚠️  Warning: Nix garbage collection failed"
+            fi && \
+
+            # macOS File Cleanup
+            echo "🧹 Cleaning .DS_Store files..." && \
+            find ${homeDir} -type f -name '.DS_Store' -delete 2>/dev/null || true && \
+            find ${homeDir} -type f -name '._*' -delete 2>/dev/null || true && \
+
+            # Node.js Cleanup
+            echo "🧹 Cleaning npm cache..." && \
+            if command -v npm &> /dev/null; then
+                npm cache clean --force 2>/dev/null || true
+                echo "✓ npm cache cleaned"
+            fi && \
+
+            # Clear global npm packages that aren't needed
+            echo "🧹 Cleaning unused global npm packages..." && \
+            if command -v npm &> /dev/null; then
+                unused_packages=$(npm list -g --depth=0 2>/dev/null | grep -v "npm@" | awk -F@ '/^[^ ]/ {print $1}' | tr -d ' ') && \
+                if [ -n "$unused_packages" ]; then
+                npm uninstall -g $unused_packages 2>/dev/null
+                echo "✓ Unused global npm packages removed"
+                else
+                echo "No unused global npm packages found"
+                fi
+            fi && \
+
+            # Homebrew Cleanup
+            echo "🧹 Cleaning Homebrew cache and old versions..." && \
+            if command -v brew &> /dev/null; then
+                brew cleanup 2>/dev/null || true
+                echo "✓ Homebrew cleanup complete"
+            fi && \
+
+            # System Log Cleanup
+            echo "📝 Cleaning system logs..." && \
+            # ASL Logs
+            if [ -d "/private/var/log/asl" ]; then
+                sudo rm -rf /private/var/log/asl/*.asl 2>/dev/null || true
+            fi && \
+            # System Diagnostic Reports
+            if [ -d "/Library/Logs/DiagnosticReports" ]; then
+                sudo rm -rf /Library/Logs/DiagnosticReports/* 2>/dev/null || true
+            fi && \
+            # User Diagnostic Reports
+            if [ -d "${homeDir}/Library/Logs/DiagnosticReports" ]; then
+                sudo rm -rf ${homeDir}/Library/Logs/DiagnosticReports/* 2>/dev/null || true
+            fi && \
+
+            # Temporary File Cleanup
+            echo "🧹 Cleaning temporary files..." && \
+            if [ -d "/private/var/tmp" ]; then
+                sudo rm -rf /private/var/tmp/* 2>/dev/null || true
+            fi && \
+
+            # Package Manager Cache
+            echo "🧹 Cleaning UV cache..." && \
+            if command -v uv &> /dev/null; then
+                ${homeDir}/.local/bin/uv cache clean 2>/dev/null || true
+            fi && \
+
+            # Nix Store Optimization
+            echo "🧹 Optimizing Nix store..." && \
+            if nix store optimise --option max-jobs 6 --cores 2; then
+                echo "✓ Nix store optimization complete"
+            else
+                echo "⚠️  Warning: Nix store optimization failed"
+            fi && \
+
+            echo "✨ Cleanup complete!"
         '';
+
+        # Finder Controls
+        # Toggle visibility settings
+        show = "defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder";
+        hide = "defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder";
+        # Desktop Management
+        hidedesktop = "defaults write com.apple.finder CreateDesktop -bool false && killall Finder";
+        showdesktop = "defaults write com.apple.finder CreateDesktop -bool true && killall Finder";
+
+        # System Controls
+        # Quick system actions
+        stfu = "osascript -e 'set volume output muted true'";          # Mute audio
+        pumpitup = "osascript -e 'set volume output volume 100'";      # Max volume
+        afk = "osascript -e 'tell application \"System Events\" to keystroke \"q\" using {command down,control down}'";  # Lock screen
+
+        # Development Shortcuts
+        # Quick access to dotfiles
+        codedot = ''
+            if command -v cursor &> /dev/null; then
+                cursor "${dotfileDir}"    # Open in Cursor if available
+            else
+                code "${dotfileDir}"      # Fall back to VS Code
+            fi
+        '';   # Smart editor selection for dotfiles
     } else {};
 
 

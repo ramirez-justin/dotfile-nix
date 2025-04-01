@@ -73,7 +73,6 @@
     ./modules/ghostty
     ./modules/karabiner
     ./modules/lazygit.nix
-    ./modules/starship.nix
     ./neovim.nix
   ];
 

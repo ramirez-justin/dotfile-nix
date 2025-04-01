@@ -57,7 +57,6 @@ homebrew = {
   # CLI Tools
   brews = [
     "git"
-    "starship"
   ];
 
   # GUI Applications

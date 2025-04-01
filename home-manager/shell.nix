@@ -40,13 +40,6 @@
   inherit (args) hostname;
 in
 {
-  # Starship: Cross-shell prompt
-  programs.starship = {
-    enable = true;
-    # Configuration is managed via preset in configuration.nix
-    # Using gruvbox-rainbow theme
-  };
-
   # FZF: Command-line fuzzy finder
   programs.fzf = {
     enable = true;
