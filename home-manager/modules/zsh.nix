@@ -77,7 +77,7 @@
             KAGI_API_KEY = "op://dev_vault/KAGI_API_KEY/credential";
         };
 
-        initExtra = ''
+        initContent = ''
             # Development Tools Setup
             # Initialize SDKMAN if installed
             if [ -d "$HOME/.sdkman" ]; then

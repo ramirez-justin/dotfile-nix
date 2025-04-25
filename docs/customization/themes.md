@@ -90,15 +90,15 @@ Guide to customizing the visual appearance of your system and applications.
     enable = true;
     enableAutosuggestions = true;
     enableSyntaxHighlighting = true;
-    
-    initExtra = ''
+
+    initContent = ''
       # Shell appearance settings
       export TERM="xterm-256color"
-      
+
       # History appearance
       export HISTSIZE=10000
       export SAVEHIST=10000
-      
+
       # Directory colors
       eval "$(dircolors)"
     '';

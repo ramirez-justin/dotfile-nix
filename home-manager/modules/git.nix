@@ -106,7 +106,7 @@ in {
 
   # Utility Functions
   # Custom Git helper functions
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     # Branch Detection
     # Determine default branch name
     function gitdefaultbranch() {

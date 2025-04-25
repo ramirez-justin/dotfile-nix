@@ -23,7 +23,7 @@
 
 { config, pkgs, ... }: {
   programs.zsh = {
-    initExtra = ''
+    initContent = ''
       # Initialize Google Cloud SDK
       # Adds completions and updates PATH
       # Source: google-cloud-sdk package from nixpkgs

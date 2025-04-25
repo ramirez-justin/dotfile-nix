@@ -83,7 +83,7 @@
     };
   };
 
-  outputs = { self, darwin, nixpkgs, home-manager, nix-homebrew, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, home-manager, nix-homebrew, sops-nix, ... }@inputs:
   let
     system = "aarch64-darwin";
     # Validate hostname format
@@ -162,7 +162,6 @@
         # Homebrew configuration
         nix-homebrew.darwinModules.nix-homebrew
         ./darwin/homebrew.nix
-
 
         # Secrets Management
         # SOPS-nix configuration

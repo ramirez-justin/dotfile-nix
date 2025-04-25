@@ -12,7 +12,7 @@
 
 { config, pkgs, ... }: {
   programs.zsh = {
-    initExtra = ''
+    initContent = ''
       # Enable AWS CLI command completion
       # Uses aws_completer from awscli2 package
       complete -C '${pkgs.awscli2}/bin/aws_completer' aws

@@ -32,7 +32,7 @@
     };
 
     # Custom GitHub Workflow Functions
-    programs.zsh.initExtra = ''
+    programs.zsh.initContent = ''
         # Basic PR listing with state filter
         function ghpr() {
         gh pr list --state "$1" --limit 1000 | fzf

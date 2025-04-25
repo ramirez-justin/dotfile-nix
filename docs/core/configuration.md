@@ -115,7 +115,7 @@ ZSH is the default shell. You can customize it by adding initialization commands
 # In home-manager/modules/zsh.nix
 programs.zsh = {
   enable = true;
-  initExtra = ''
+  initContent = ''
     # Your custom shell initialization
   '';
   shellAliases = {
