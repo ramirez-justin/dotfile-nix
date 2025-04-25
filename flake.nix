@@ -61,6 +61,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # SOPS-nix for secrets management
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Homebrew management
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     homebrew-core = {
@@ -157,6 +163,11 @@
         nix-homebrew.darwinModules.nix-homebrew
         ./darwin/homebrew.nix
 
+
+        # Secrets Management
+        # SOPS-nix configuration
+        sops-nix.darwinModules.sops
+
         # System Configuration
         # Core system settings and defaults
         ({ config, pkgs, ... }: {
@@ -225,9 +236,6 @@
                 if [ -f "$HOME/.cargo/env" ]; then
                     source "$HOME/.cargo/env"
                 fi
-                source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
-                source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-                source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
                 source $(brew --prefix)/opt/spaceship/spaceship.zsh
             '';
           };
