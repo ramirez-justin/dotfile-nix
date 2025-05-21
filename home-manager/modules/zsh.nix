@@ -73,8 +73,6 @@
             PATH = "$HOME/.local/bin:$HOME/Library/Application Support/pypoetry/venv/bin:$PATH";
             NIX_PATH = "$HOME/.nix-defexpr/channels:$NIX_PATH";
             FPATH = "$HOME/.zsh/completion:$FPATH";
-            ANTHROPIC_API_KEY = "op://dev_vault/ANTHROPIC_API_KEY/credential";
-            KAGI_API_KEY = "op://dev_vault/KAGI_API_KEY/credential";
         };
 
         initContent = ''

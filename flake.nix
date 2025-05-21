@@ -130,6 +130,10 @@
         # Base darwin configuration
         ./darwin/configuration.nix
 
+        # Secrets Management
+        # SOPS-nix configuration
+        sops-nix.darwinModules.sops
+
         # User Environment
         # Home manager configuration
         home-manager.darwinModules.home-manager
@@ -163,10 +167,6 @@
         nix-homebrew.darwinModules.nix-homebrew
         ./darwin/homebrew.nix
 
-        # Secrets Management
-        # SOPS-nix configuration
-        sops-nix.darwinModules.sops
-
         # System Configuration
         # Core system settings and defaults
         ({ config, pkgs, ... }: {
@@ -179,9 +179,13 @@
             experimental-features = [ "nix-command" "flakes" ];  # Enable modern features
           };
 
+          # Set primary user for user-specific options
+          system.primaryUser = userConfig.username;
+
           # Homebrew Setup
           # Pre-activation script for Homebrew
-          system.activationScripts.preUserActivation.text = ''
+          system.activationScripts.homebrew-setup.text = ''
+            echo "Setting up Homebrew environment..."
             export INSTALLING_HOMEBREW=1
           '';
 

@@ -170,12 +170,13 @@ in {
 
             # Security
             "gnupg"                       # OpenPGP implementation
+            "age"                         # Simple, modern encryption tool
 
             # Cloud and Infrastructure Tools
             "awscli"                      # AWS CLI
             "terraform-docs"              # Terraform documentation
             "tflint"                      # Terraform linter
-            "warrensbox/tap/tfswitch"     # Terraform version manager
+            "tenv"                        # Terraform version manager
         ];
 
         # GUI Applications (Casks)

@@ -80,9 +80,12 @@
     ids.gids.nixbld = 350;
 
     # Required for proper Homebrew installation
-    system.activationScripts.preUserActivation.text = ''
+    system.activationScripts.extraActivation.text = ''
         export INSTALLING_HOMEBREW=1
     '';
+
+    # Set primary user for user-specific options
+    system.primaryUser = userConfig.username;
 
     # Allow installation of non-free packages
     nixpkgs = {
@@ -95,9 +98,7 @@
     environment.systemPackages = [
         # macOS Integration
         # Required for proper system integration
-        pkgs.darwin.apple_sdk.frameworks.SystemConfiguration
-        pkgs.darwin.apple_sdk.frameworks.CoreServices
-        pkgs.darwin.apple_sdk.frameworks.Security
+        pkgs.darwin.IOKit
         pkgs.darwin.cctools
 
         # Core Utilities
@@ -251,7 +252,7 @@
         backupFileExtension = lib.mkForce "bak";
     };
 
-    system.activationScripts.postUserActivation.text = ''
+    system.activationScripts.development-tools.text = ''
         echo "Setting up development tools..."
 
         # Xcode Command Line Tools Check
@@ -435,25 +436,9 @@
             pynvim \
             isort \
             mypy \
-            pytest \
             ipython \
-            jupyter \
-            pandas \
-            numpy \
-            matplotlib \
             python-lsp-server \
-            scipy \
-            polars \
-            pyarrow \
-            seaborn \
-            plotly \
-            scikit-learn \
-            statsmodels \
-            jupyterlab \
             ipykernel \
-            dbt-core \
-            sqlalchemy \
-            great-expectations \
             pylsp-mypy \
             python-lsp-ruff
 
