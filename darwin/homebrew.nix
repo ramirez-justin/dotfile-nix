@@ -140,6 +140,8 @@ in {
             "php"                         # PHP programming language
             "julia"                       # Julia programming language
             "zsh"                         # Z shell
+            "checkov"                     # Static code analysis for Terraform
+            "trivy"                       # Static code analysis for Terraform
 
             # Development Tools
             # These versions are preferred over Nix for various reasons
@@ -152,6 +154,7 @@ in {
             "node"                        # Node.js (includes npm and npx)
             "deno"                        # Secure JavaScript runtime
             "neovim"                      # Modern text editor
+            "pre-commit"                  # Git hooks manager
 
             # Text Processing and Search
             "bat"                         # Modern cat with syntax highlighting

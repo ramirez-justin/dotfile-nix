@@ -306,7 +306,7 @@
         # System Update Commands
         # Quick System Rebuild
         # Rebuild system without updating flake
-        rebuild = "cd ${dotfileDir} && sudo -i darwin-rebuild switch --flake .#\"$(hostname)\" --option max-jobs auto && cd $HOME";
+        rebuild = "cd ${dotfileDir} && sudo darwin-rebuild switch --flake .#\"$(hostname)\" --option max-jobs auto && cd $HOME";
 
         # Flake and system update management
         update = ''
@@ -314,8 +314,7 @@
             echo "🔄 Updating Nix flake..." && \
             cd ${dotfileDir} && \
             nix --option max-jobs auto flake update && \
-            echo "🔄 Rebuilding system..." && \
-            sudo -i darwin-rebuild switch --flake .#\"$(hostname)\" --option max-jobs auto && \
+            echo "🔄 Rebuilding system..." && rebuild && \
             echo "✨ System update complete!"
         '';
         cleanup = ''
