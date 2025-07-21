@@ -79,6 +79,7 @@
   # Core packages required for basic functionality
   home.packages = with pkgs; [
     oh-my-zsh
+    claude-code
   ];
 
   programs = {
