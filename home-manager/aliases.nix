@@ -133,10 +133,11 @@
         tfi = "tfswitch -i";            # Install version
         tfu = "tfswitch -u";            # Use version
         tfl = "tfswitch -l";            # List versions
-        # Workspace Management
-        tfwst = "terraform workspace select";
-        tfwsw = "terraform workspace show";
-        tfwls = "terraform workspace list";
+        # Terragrunt commands
+        tg  = "terragrunt";              # Main command
+        tgi = "terragrunt init";       # Initialize
+        tgp = "terragrunt plan";        # Plan changes
+        tga = "terragrunt apply";       # Apply changes
 
         # Container Management
         # Docker shortcuts and utilities
