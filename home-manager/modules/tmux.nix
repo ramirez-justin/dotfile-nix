@@ -55,7 +55,7 @@
     programs.tmux = {
         enable = true;
         # Core Configuration
-        shortcut = "a";     # Prefix key (Ctrl-a)
+        shortcut = "s";     # Prefix key (Ctrl-s)
         baseIndex = 1;      # Start window numbering at 1
         escapeTime = 0;     # Remove escape key delay
 
