@@ -125,10 +125,7 @@ in {
 
             # Python Development Environment
             # Managed via Homebrew for better macOS integration
-            "pyenv"                       # Python version manager
-            "pyenv-virtualenv"            # Python virtual environments
             "uv"                          # Python package manager
-            "pipx"                        # Python package manager
 
             # Other Programming Languages & their Tools
             "go"                          # Go programming language
@@ -155,6 +152,8 @@ in {
             "deno"                        # Secure JavaScript runtime
             "neovim"                      # Modern text editor
             "pre-commit"                  # Git hooks manager
+            "sops"                        # Secrets management
+            "mise"                        # The front-end to your dev env
 
             # Text Processing and Search
             "bat"                         # Modern cat with syntax highlighting
@@ -188,7 +187,7 @@ in {
             "discord"                     # Move from configuration.nix
 
             # Cloud Tools
-            "google-cloud-sdk"           # Google Cloud Platform SDK
+            "gcloud-cli"                  # Google Cloud Platform SDK
 
             # Development Tools
             "docker"

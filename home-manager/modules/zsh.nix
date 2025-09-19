@@ -10,9 +10,6 @@
 # Manages:
 # - Shell environment setup
 # - PATH management
-#   - pipx binaries ($HOME/.local/bin)
-#   - poetry ($HOME/Library/Application Support/pypoetry/venv/bin)
-#   - pyenv initialization
 #
 # Tool initializations:
 # - SDKMAN for Java version management
@@ -70,7 +67,6 @@
         # Add environment variables
         sessionVariables = {
             # Ensure all necessary paths are available
-            PATH = "$HOME/.local/bin:$HOME/Library/Application Support/pypoetry/venv/bin:$PATH";
             NIX_PATH = "$HOME/.nix-defexpr/channels:$NIX_PATH";
             FPATH = "$HOME/.zsh/completion:$FPATH";
         };
@@ -83,30 +79,14 @@
                 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
             fi
 
-            # Initialize pyenv
-            if command -v pyenv &> /dev/null; then
-                export PYENV_ROOT="$HOME/.pyenv"
-                [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-                eval "$(pyenv init - zsh)"
-                eval "$(pyenv virtualenv-init -)"
-            fi
-
-            # Activate nvim_python3
-            if pyenv virtualenvs | grep -q nvim_python3; then
-                pyenv activate nvim_python3
-            fi
-
-            # Ensure poetry is in PATH
-            if [ -d "$HOME/.local/bin" ]; then
-                export PATH="$HOME/.local/bin:$PATH"
-            fi
-
-            if [ -d "$HOME/Library/Application Support/pypoetry/venv/bin" ]; then
-                export PATH="$HOME/Library/Application Support/pypoetry/venv/bin:$PATH"
-            fi
+            # Set SOPS default editor
+            export SOPS_EDITOR="nvim"
 
             # Initialize zoxide
             eval "$(zoxide init zsh)"
+
+            # Activate mise
+            eval "$(mise activate zsh)"
 
             # FZF Integration Widgets
             # Interactive git status with file preview

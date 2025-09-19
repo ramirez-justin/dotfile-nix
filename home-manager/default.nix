@@ -67,6 +67,7 @@
     # Development Tools
     ./modules/git.nix
     ./modules/github.nix
+    ./modules/python.nix
     # Core Environment
     ./modules/zsh.nix
     ./modules/alacritty

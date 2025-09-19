@@ -233,7 +233,6 @@
                 autoload -U promptinit; promptinit
             '';
             interactiveShellInit = ''
-                export PATH="$HOME/Library/Application Support/pypoetry/venv/bin:$PATH"
                 export PATH="$HOME/.local/bin:$PATH"
                 export PATH="/Applications/Julia-1.9.app/Contents/Resources/julia/bin:$PATH"
                 if [ -f "$HOME/.cargo/env" ]; then

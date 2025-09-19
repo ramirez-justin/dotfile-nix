@@ -37,8 +37,7 @@
 #   - Installs Java 8, 11, 17 (Amazon Corretto)
 #   - Sets Java 11 as default
 # - Python environment setup
-#   - Poetry installation and management
-#   - pyenv Python version management
+#   - Uv package manager
 # - AWS credential management
 #
 # 5. Security:
@@ -98,7 +97,6 @@
     environment.systemPackages = [
         # macOS Integration
         # Required for proper system integration
-        pkgs.darwin.IOKit
         pkgs.darwin.cctools
 
         # Core Utilities
@@ -325,146 +323,16 @@
         fi
 
 
-        # Python Development Environment
+        # Python Development Environment with uv
         echo "Setting up Python environment..."
-
-        # Poetry Package Manager Setup
-        # Install specific version for compatibility
-        POETRY_PATH="$HOME/.local/bin/poetry"
-        if [ ! -f "$POETRY_PATH" ] || ! "$POETRY_PATH" --version | grep "1.5.1"; then
-            echo "Installing Poetry 1.5.1..."
-            # Add both Homebrew and local bin to PATH
-            export PATH="/opt/homebrew/bin:$HOME/.local/bin:$PATH"
-
-            # Check if pipx is available
-            if ! command -v pipx &> /dev/null; then
-                echo "pipx not found, installing Poetry with pip..."
-                python3 -m pip install --user poetry==1.5.1
-            else
-                # Install via pipx for isolation
-                pipx install poetry==1.5.1
-                # Ensure pipx binaries are available
-                pipx ensurepath
-            fi
-        else
-            echo "Poetry $(poetry --version) is already installed at $POETRY_PATH"
+        # Check if mise is available (installed via Homebrew)
+        if ! command -v mise &> /dev/null; then
+            echo "mise not found. Please ensure it's installed via Homebrew"
+            exit 1
         fi
 
-        # Setup pyenv and install Python versions
-        # Python Version Management with pyenv
-        # Configure Python versions and global defaults
-        export PYENV_ROOT=~/.pyenv
-        export PATH="${pkgs.pyenv}/bin:$PATH"
-
-        if command -v pyenv &> /dev/null; then
-            echo "Setting up Python versions..."
-            # Initialize pyenv directory
-            mkdir -p "$PYENV_ROOT"
-
-            # Temporarily remove any existing .python-version file that might interfere
-            if [ -f "$HOME/.python-version" ]; then
-                echo "Found existing .python-version file, temporarily moving it"
-                mv "$HOME/.python-version" "$HOME/.python-version.bak"
-            fi
-
-            # Initialize pyenv
-            eval "$(pyenv init -)"
-
-            # First check if any Python is already installed
-            if command -v python3 &> /dev/null; then
-                PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
-                echo "Python $PYTHON_VERSION is already installed on the system"
-            else
-                # Python Version Installation Helper
-                # Function to install Python version if not already installed
-
-                install_python_version() {
-                    # Check if any version that starts with the given prefix exists
-                    if ! pyenv versions | grep "^[*[:space:]]*$1"; then
-                        echo "Installing Python $1"
-                        # Use -s flag to skip if version exists
-                        pyenv install -s "$1" || true
-                    else
-                        echo "Python $1 is already installed"
-                    fi
-                }
-
-                # Python Version Management
-                # Install and configure specific Python versions
-                # install_python_version "3.10"      # Primary development version
-                # Add more versions as needed:
-                # install_python_version "3.9"     # Legacy support
-                install_python_version "3.11"    # Latest features
-            fi
-
-            # Set Global Python Version if pyenv has any versions
-            if pyenv versions | grep "3\."; then
-                echo "Setting Python 3.11 as global Python version"
-                pyenv global 3.11
-            fi
-
-            # Check if the virtual environment already exists
-            if pyenv virtualenvs | grep "nvim_python3"; then
-                echo "Virtual environment 'nvim_python3' already exists."
-                echo "Removing existing environment to create a fresh one..."
-                pyenv virtualenv-delete -f nvim_python3 || true
-            fi
-
-            # Create a new virtual environment using pyenv
-            # This uses the current pyenv global Python version
-            echo "Creating new virtual environment 'nvim_python3'..."
-            if ! pyenv virtualenvs | grep "nvim_python3"; then
-                pyenv virtualenv 3.11 nvim_python3
-            else
-                echo "Using existing 'nvim_python3' environment"
-            fi
-
-            # Activate the virtual environment
-            echo "Activating virtual environment..."
-            pyenv activate nvim_python3
-
-        # Upgrade pip
-        echo "Upgrading pip..."
-        pip install --upgrade pip
-
-        # Install all required packages
-        echo "Installing packages..."
-        pip install \
-            ruff \
-            codespell \
-            neovim \
-            pynvim \
-            isort \
-            mypy \
-            ipython \
-            python-lsp-server \
-            ipykernel \
-            pylsp-mypy \
-            python-lsp-ruff
-
-        # Register the kernel for Jupyter
-        echo "Registering Jupyter kernel..."
-        python -m ipykernel install --user --name=nvim_python3 --display-name="Python (nvim_python3)"
-
-        # Deactivate the virtual environment
-        pyenv deactivate
-
-        # Restore the original .python-version file if it existed
-        if [ -f "$HOME/.python-version.bak" ]; then
-            echo "Restoring original .python-version file"
-            mv "$HOME/.python-version.bak" "$HOME/.python-version"
-        fi
-
-        # Print notices
-        echo "Virtual environment 'nvim_python3' has been set up successfully!"
-        echo "To activate: pyenv activate nvim_python3"
-        echo "To set as local Python for a project: pyenv local nvim_python3"
-    else
-        # Installation Error Handling
-        echo "pyenv not found. Please ensure it's installed via Nix"
-    fi
-
-
+        echo "Installing Python..."
+        mise use -g python@3.12
 
      # Setup Cargo and Rust
     echo "Setting up Rust environment..."
@@ -529,7 +397,5 @@
     "Remember to run 'xcode-select --install' if building fails"
 # Note about credential management
     "AWS credentials should be managed via the provided scripts"
-# Python environment note
-    "Use 'poetry' for project dependencies and 'pyenv' for Python versions"
     ];
 }
