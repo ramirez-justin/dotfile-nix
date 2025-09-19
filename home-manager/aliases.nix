@@ -307,7 +307,12 @@
         # System Update Commands
         # Quick System Rebuild
         # Rebuild system without updating flake
-        rebuild = "cd ${dotfileDir} && sudo darwin-rebuild switch --flake .#\"$(hostname)\" --option max-jobs auto && cd $HOME";
+        rebuild = ''
+            cd ${dotfileDir} && \
+            sudo darwin-rebuild switch --flake .#\"$(hostname)\" --option max-jobs auto && \
+            cd $HOME && \
+            echo "🏗️ Rebuild complete!"
+        '';
 
         # Flake and system update management
         update = ''
