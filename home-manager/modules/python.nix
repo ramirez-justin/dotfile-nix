@@ -26,11 +26,6 @@
     # Neovim integration
     pynvim
 
-    # Language Server Protocol
-    python-lsp-server
-    pylsp-mypy
-    python-lsp-ruff
-
     # Code quality and formatting
     ruff
     mypy
