@@ -71,6 +71,7 @@
     # Core Environment
     ./modules/zsh.nix
     ./modules/alacritty
+    ./modules/claude
     ./modules/ghostty
     ./modules/karabiner
     ./modules/lazygit.nix
