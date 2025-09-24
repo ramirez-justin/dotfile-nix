@@ -190,8 +190,8 @@ in {
             "gcloud-cli"                  # Google Cloud Platform SDK
 
             # Development Tools
-            "docker"
-            "postman"                         # API testing tool
+            "docker-desktop"              # Docker Desktop
+            "postman"                     # API testing tool
 
             # Terminal and System Tools
             # Conditionally include terminal emulators based on user preference

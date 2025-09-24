@@ -27,7 +27,5 @@
     # Using symlink to maintain single source of truth
     ln -sf "${toString ./statusline.sh}" "$HOME/.claude/statusline.sh"
 
-    # Make script executable
-    chmod +x "$HOME/.claude/statusline.sh"
   '';
 }
