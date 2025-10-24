@@ -335,6 +335,7 @@
         mise settings set python.uv_venv_auto true
         mise settings set experimental true
         mise use -g python@3.12
+        mise use -g aqua:go-task/task@latest
 
      # Setup Cargo and Rust
     echo "Setting up Rust environment..."

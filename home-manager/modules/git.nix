@@ -27,39 +27,37 @@ in {
   programs.git = {
     enable = true;
 
-    # User Identity
-    # Used for commit authorship
-    userName = fullName;
-    userEmail = email;
+    settings = {
+        user = {
+            name = fullName;
+            email = email;
+        };
 
-    # Git Core Configuration
-    # Global settings for all repositories
-    extraConfig = {
-      # Branch Configuration
-      init.defaultBranch = "develop";    # Default for new repositories
-      # Pull/Push Behavior
-      pull.rebase = true;                # Avoid merge commits on pull
-      push.autoSetupRemote = true;       # Auto-configure upstream
-      # Editor and File Handling
-      core = {
-        editor = "nvim";                  # Default editor for commits
-        autocrlf = "input";              # Line ending management
-      };
-      # UI Configuration
-      color.ui = true;                   # Colorized output
-    };
+        # Built-in Git Aliases
+        # Shorter versions of common commands
+        aliases = {
+        st = "status";                     # Quick status check
+        ci = "commit";                     # Shorter commit command
+        br = "branch";                     # Branch management
+        co = "checkout";                   # Branch switching
+        df = "diff";                       # Change viewing
+        # Enhanced Log View
+        # Shows commit graph with colors and author info
+        lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        };
 
-    # Built-in Git Aliases
-    # Shorter versions of common commands
-    aliases = {
-      st = "status";                     # Quick status check
-      ci = "commit";                     # Shorter commit command
-      br = "branch";                     # Branch management
-      co = "checkout";                   # Branch switching
-      df = "diff";                       # Change viewing
-      # Enhanced Log View
-      # Shows commit graph with colors and author info
-      lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        # Branch Configuration
+        init.defaultBranch = "develop";    # Default for new repositories
+        # Pull/Push Behavior
+        pull.rebase = true;                # Avoid merge commits on pull
+        push.autoSetupRemote = true;       # Auto-configure upstream
+        # Editor and File Handling
+        core = {
+            editor = "nvim";                  # Default editor for commits
+            autocrlf = "input";              # Line ending management
+        };
+        # UI Configuration
+        color.ui = true;                   # Colorized output
     };
 
     # Global Ignores
