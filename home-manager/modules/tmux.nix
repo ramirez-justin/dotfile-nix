@@ -14,7 +14,7 @@
 # - Gruvbox theme integration
 #
 # Key Bindings:
-# Prefix: Ctrl-a
+# Prefix: Ctrl-space
 #
 # Window Management:
 #   h         : Split horizontal
@@ -47,7 +47,7 @@
 # - Uses TPM for plugins
 #
 # Note:
-# - Uses Ctrl+a prefix
+# - Uses Ctrl+space prefix
 # - Mouse mode enabled
 # - Vi keys supported
 
@@ -55,7 +55,7 @@
     programs.tmux = {
         enable = true;
         # Core Configuration
-        shortcut = "s";     # Prefix key (Ctrl-s)
+        shortcut = "space";     # Prefix key (Ctrl-space)
         baseIndex = 1;      # Start window numbering at 1
         escapeTime = 0;     # Remove escape key delay
 

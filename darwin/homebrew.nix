@@ -186,9 +186,6 @@ in {
             # Communication
             "discord"                     # Move from configuration.nix
 
-            # Cloud Tools
-            "gcloud-cli"                  # Google Cloud Platform SDK
-
             # Development Tools
             "docker-desktop"              # Docker Desktop
             "postman"                     # API testing tool
