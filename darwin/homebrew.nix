@@ -122,6 +122,7 @@ in {
             "stow"                        # Symlink farm manager
             "zoxide"                      # Smarter cd command
             "spaceship"                   # minimalistic, powerful and extremely customizable Zsh prompt
+            "gmailctl"                    # powerful command-line tool for Gmail
 
             # Python Development Environment
             # Managed via Homebrew for better macOS integration
