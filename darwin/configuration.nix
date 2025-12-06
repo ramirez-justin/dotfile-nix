@@ -378,7 +378,7 @@
     assertions = [
     # Verify architecture setting
     {
-    assertion = pkgs.system == "aarch64-darwin";
+    assertion = pkgs.stdenv.hostPlatform.system == "aarch64-darwin";
     message = "This configuration is only for Apple Silicon Macs";
     }
     # Verify Nix daemon is enabled
