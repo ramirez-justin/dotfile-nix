@@ -83,7 +83,13 @@
             export SOPS_EDITOR="nvim"
 
             # Initialize zoxide
-            eval "$(zoxide init zsh)"
+            # Use --cmd cd to replace cd with zoxide, but skip in Claude Code's shell
+            # so it can use standard cd without __zoxide_z errors
+            if [[ "$CLAUDECODE" != "1" ]]; then
+                eval "$(zoxide init --cmd cd zsh)"
+            else
+                eval "$(zoxide init zsh)"
+            fi
 
             # Activate mise
             eval "$(mise activate zsh)"

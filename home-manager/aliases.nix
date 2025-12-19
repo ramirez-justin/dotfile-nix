@@ -202,8 +202,8 @@
         fconf = "fd -e conf -e config";         # Find config files
 
         # Smart Navigation
-        # Zoxide for intelligent directory jumping
-        cd = "z";  # Use zoxide's smart directory jumping
+        # Zoxide handles cd replacement via --cmd cd flag in zsh.nix
+        # (skipped when CLAUDECODE=1 so Claude Code can use standard cd)
 
         # Fuzzy Finding Enhancements
         # FZF-powered interactive commands
