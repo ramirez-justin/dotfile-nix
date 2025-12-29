@@ -45,7 +45,7 @@
       };
       statusLine = {
         type = "command";
-        command = "./statusline.sh";
+        command = "${config.home.homeDirectory}/.claude/statusline.sh";
       };
     };
   };
@@ -53,6 +53,7 @@
   # Link statusline script to Claude's expected location
   home.file.".claude/statusline.sh" = {
     source = ./statusline.sh;
+    executable = true;  # Make script executable
     force = true;  # Overwrite existing file
   };
 }

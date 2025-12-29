@@ -362,23 +362,23 @@
 
             # System Log Cleanup
             echo "📝 Cleaning system logs..." && \
-            # ASL Logs
+            # ASL Logs (use find to avoid zsh glob errors)
             if [ -d "/private/var/log/asl" ]; then
-                sudo rm -rf /private/var/log/asl/*.asl 2>/dev/null || true
+                sudo find /private/var/log/asl -name "*.asl" -delete 2>/dev/null || true
             fi && \
             # System Diagnostic Reports
             if [ -d "/Library/Logs/DiagnosticReports" ]; then
-                sudo rm -rf /Library/Logs/DiagnosticReports/* 2>/dev/null || true
+                sudo find /Library/Logs/DiagnosticReports -mindepth 1 -delete 2>/dev/null || true
             fi && \
             # User Diagnostic Reports
             if [ -d "${homeDir}/Library/Logs/DiagnosticReports" ]; then
-                sudo rm -rf ${homeDir}/Library/Logs/DiagnosticReports/* 2>/dev/null || true
+                find ${homeDir}/Library/Logs/DiagnosticReports -mindepth 1 -delete 2>/dev/null || true
             fi && \
 
             # Temporary File Cleanup
             echo "🧹 Cleaning temporary files..." && \
             if [ -d "/private/var/tmp" ]; then
-                sudo rm -rf /private/var/tmp/* 2>/dev/null || true
+                sudo find /private/var/tmp -mindepth 1 -delete 2>/dev/null || true
             fi && \
 
             # Package Manager Cache
