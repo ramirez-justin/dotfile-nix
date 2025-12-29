@@ -89,7 +89,7 @@
 # ----------------
 # After running the script:
 # 1. Restart your terminal
-# 2. Run 'darwin-rebuild switch --flake .#ss-mbp'
+# 2. Run 'darwin-rebuild switch --flake .#$HOSTNAME'
 # 3. Test your new configuration
 #
 # Troubleshooting:
@@ -105,7 +105,7 @@
 # To update your system after installation:
 # 1. cd ~/dev/dotfile
 # 2. git pull
-# 3. darwin-rebuild switch --flake .#ss-mbp
+# 3. darwin-rebuild switch --flake .#$HOSTNAME
 
 # Installation Stages:
 # ------------------
@@ -397,7 +397,10 @@ if [[ $setup_dotfiles =~ ^[Yy]$ ]]; then
         read -r update_dotfiles
         if [[ $update_dotfiles =~ ^[Yy]$ ]]; then
             cd "$HOME/dev/dotfile"
-            # TODO: Check out main prior to pulling
+            # Ensure we're on main branch before pulling
+            if git rev-parse --verify main >/dev/null 2>&1; then
+                git checkout main
+            fi
             git pull
         fi
     fi
@@ -521,8 +524,11 @@ fi
 
 
 # Check for newest version of Zsh
-if [ "$(zsh --version | cut -d' ' -f2)" -lt 5.9 ]; then
-    echo -e "${BLUE}Zsh version is outdated. Switching to latest version...${NC}"
+# Compare zsh version using sort -V for proper version comparison
+current_zsh_version=$(zsh --version | cut -d' ' -f2)
+required_version="5.9"
+if [ "$(printf '%s\n' "$required_version" "$current_zsh_version" | sort -V | head -n1)" != "$current_zsh_version" ] && [ "$current_zsh_version" != "$required_version" ]; then
+    echo -e "${BLUE}Zsh version ($current_zsh_version) is outdated. Switching to latest version...${NC}"
     if ! brew list --formula | grep -q "^zsh$"; then
         brew install zsh
     fi
@@ -582,54 +588,6 @@ if [[ $setup_git =~ ^[Yy]$ ]]; then
     fi
     echo -e "${BLUE}Authenticating with GitHub, follow the prompts...${NC}"
     gh auth login
-
-
-    # # Create/Update user-config.nix
-    # echo -e "${BLUE}Creating user configuration...${NC}"
-    # cat > user-config.nix << EOF
-    # {
-    #   username = "$USERNAME";
-    #   fullName = "$FULLNAME";
-    #   email = "$EMAIL";
-    #   githubUsername = "$GITHUB_USERNAME";
-    #   hostname = "$HOSTNAME";
-    # }
-    # EOF
-    #
-    # # SSH Key Generation
-    # # Generate SSH key
-    # echo -e "${BLUE}Generating SSH key...${NC}"
-    # ssh-keygen -t ed25519 -C "$git_email" -f "$HOME/.ssh/github"
-    #
-    # # SSH Agent Configuration
-    # # Start ssh-agent and add key
-    # eval "$(ssh-agent -s)"
-    # ssh-add "$HOME/.ssh/github"
-    #
-    # # SSH Config Setup
-    # # Create/update SSH config
-    # mkdir -p "$HOME/.ssh"
-    # echo -e "Host github.com\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/github" >> "$HOME/.ssh/config"
-    #
-    # # GitHub Integration
-    # # Display public key and instructions
-    # echo -e "${GREEN}Your SSH public key:${NC}"
-    # cat "$HOME/.ssh/github.pub"
-    # echo -e "${BLUE}Please add this key to your GitHub account:${NC}"
-    # echo "1. Go to GitHub.com"
-    # echo "2. Click your profile picture -> Settings"
-    # echo "3. Click 'SSH and GPG keys' -> 'New SSH key'"
-    # echo "4. Paste the above key and save"
-    #
-    # # User Verification
-    # # Wait for user to add key to GitHub
-    # echo -e "${BLUE}Press any key after adding the key to GitHub...${NC}"
-    # read -n 1 -s
-    #
-    # # Connection Test
-    # # Test SSH connection
-    # echo -e "${BLUE}Testing GitHub SSH connection...${NC}"
-    # ssh -T git@github.com
 fi
 
 # Stage 8: Final Configuration

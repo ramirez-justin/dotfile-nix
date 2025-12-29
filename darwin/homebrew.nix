@@ -77,8 +77,8 @@
 { config, pkgs, lib, userConfig, ... }:
 
 let
-  # Get terminal preference from userConfig, defaulting to "alacritty" if not specified
-  preferredTerminal = userConfig.terminal or "alacritty";
+  # Get terminal preference from userConfig, defaulting to "ghostty" if not specified
+  preferredTerminal = userConfig.terminal or "ghostty";
 in {
     nix-homebrew = {
         # Install Homebrew under the default prefix
@@ -98,6 +98,7 @@ in {
         # Configure taps
         taps = [
             "homebrew/bundle"
+            "hashicorp/tap"       # For terraform-ls
             "warrensbox/tap"      # For tfswitch
         ];
 
@@ -177,6 +178,7 @@ in {
 
             # Cloud and Infrastructure Tools
             "awscli"                      # AWS CLI
+            "hashicorp/tap/terraform-ls"  # Terraform Language Server
             "terraform-docs"              # Terraform documentation
             "tflint"                      # Terraform linter
             "tenv"                        # Terraform version manager
@@ -185,18 +187,16 @@ in {
         # GUI Applications (Casks)
         casks = [
             # Communication
-            "discord"                     # Move from configuration.nix
+            "discord"                     # Voice and text chat
 
             # Development Tools
             "docker-desktop"              # Docker Desktop
             "postman"                     # API testing tool
 
-            # Terminal and System Tools
-            # Conditionally include terminal emulators based on user preference
-        ]
-        ++ lib.optional (preferredTerminal == "alacritty") "alacritty" # GPU-accelerated terminal
-        ++ lib.optional (preferredTerminal == "ghostty") "ghostty" # Fast, native, feature-rich terminal
-        ++ [
+            # Terminal
+            "ghostty"                     # Fast, native, feature-rich terminal
+
+            # System Tools
             "karabiner-elements"                                             # Keyboard customization
             "rectangle"                                                      # Window management
             "the-unarchiver"                                                 # Archive extraction

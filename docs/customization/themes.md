@@ -4,80 +4,37 @@ Guide to customizing the visual appearance of your system and applications.
 
 ## Terminal Appearance
 
-### Alacritty Theme
+### Ghostty Terminal
 
-```nix
-# home-manager/modules/alacritty/default.nix
-{
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      window = {
-        opacity = 0.95;
-        padding = {
-          x = 10;
-          y = 10;
-        };
-      };
-      
-      font = {
-        normal = {
-          family = "JetBrainsMono Nerd Font";
-          style = "Regular";
-        };
-        size = 14.0;
-      };
-      
-      colors = {
-        primary = {
-          background = "#282828";
-          foreground = "#ebdbb2";
-        };
-        # Gruvbox Dark theme
-        normal = {
-          black = "#282828";
-          red = "#cc241d";
-          green = "#98971a";
-          yellow = "#d79921";
-          blue = "#458588";
-          magenta = "#b16286";
-          cyan = "#689d6a";
-          white = "#a89984";
-        };
-      };
-    };
-  };
-}
+Ghostty configuration is managed in `home-manager/modules/ghostty/`:
+
+```toml
+# home-manager/modules/ghostty/config.toml
+# Font configuration
+font-family = "JetBrainsMono Nerd Font"
+font-size = 14
+
+# Window appearance
+window-padding-x = 10
+window-padding-y = 10
+background-opacity = 0.95
+
+# Theme (uses built-in themes)
+theme = "rose-pine"
 ```
 
-### Starship Prompt
+### Spaceship Prompt
+
+The shell prompt is configured using Spaceship, installed via Homebrew and initialized in `flake.nix`:
 
 ```nix
-# home-manager/modules/starship.nix
-{
-  programs.starship = {
-    enable = true;
-    settings = {
-      add_newline = true;
-      
-      character = {
-        success_symbol = "[➜](bold green)";
-        error_symbol = "[➜](bold red)";
-      };
-      
-      git_branch = {
-        style = "bold purple";
-        symbol = " ";
-      };
-      
-      directory = {
-        style = "bold cyan";
-        truncation_length = 3;
-      };
-    };
-  };
-}
+# darwin/homebrew.nix
+brews = [
+  "spaceship"  # minimalistic, powerful and extremely customizable Zsh prompt
+];
 ```
+
+Spaceship is auto-initialized via the shell configuration.
 
 ## Shell Customization
 
@@ -98,15 +55,27 @@ Guide to customizing the visual appearance of your system and applications.
       # History appearance
       export HISTSIZE=10000
       export SAVEHIST=10000
-
-      # Directory colors
-      eval "$(dircolors)"
     '';
   };
 }
 ```
 
 ## Application Themes
+
+### Tmux Theme
+
+Tmux uses the Rose Pine theme:
+
+```nix
+# home-manager/modules/tmux.nix
+{
+  programs.tmux = {
+    extraConfig = ''
+      set -g @plugin 'rose-pine/tmux'
+    '';
+  };
+}
+```
 
 ### LazyGit Theme
 
@@ -129,26 +98,6 @@ Guide to customizing the visual appearance of your system and applications.
 }
 ```
 
-### VS Code Theme
-
-```nix
-# home-manager/modules/vscode.nix
-{
-  programs.vscode = {
-    enable = true;
-    extensions = with pkgs.vscode-extensions; [
-      dracula-theme.theme-dracula
-    ];
-    userSettings = {
-      "workbench.colorTheme" = "Dracula";
-      "workbench.iconTheme" = "material-icon-theme";
-      "editor.fontFamily" = "'JetBrainsMono Nerd Font'";
-      "editor.fontSize" = 14;
-    };
-  };
-}
-```
-
 ## System Appearance
 
 ### macOS Theme Settings
@@ -161,13 +110,13 @@ Guide to customizing the visual appearance of your system and applications.
       AppleInterfaceStyle = "Dark";  # Dark mode
       AppleHighlightColor = "0.847059 0.847059 0.862745";
     };
-    
+
     dock = {
       autohide = true;
       orientation = "bottom";
       tilesize = 48;
     };
-    
+
     finder = {
       AppleShowAllFiles = true;
       ShowPathbar = true;
@@ -181,22 +130,15 @@ Guide to customizing the visual appearance of your system and applications.
 
 ### System Fonts
 
+Fonts are installed via Homebrew casks:
+
 ```nix
-# darwin/configuration.nix
-{
-  fonts = {
-    fontDir.enable = true;
-    fonts = with pkgs; [
-      (nerdfonts.override {
-        fonts = [
-          "JetBrainsMono"
-          "FiraCode"
-          "Hack"
-        ];
-      })
-    ];
-  };
-}
+# darwin/homebrew.nix
+casks = [
+  "font-space-mono-nerd-font"
+  "font-fira-code-nerd-font"
+  "font-maple-mono"
+];
 ```
 
 ## Best Practices

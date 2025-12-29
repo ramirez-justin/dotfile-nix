@@ -7,5 +7,6 @@
     email = "your.email@example.com";
     githubUsername = "your-github-username";
     hostname = "your-hostname";  # Only use letters, numbers, and hyphens (e.g., macbook-pro)
-    terminal = "alacritty";
+    terminal = "ghostty";         # Terminal emulator (ghostty)
+    awsRegion = "us-west-2";      # Default AWS region
 } 

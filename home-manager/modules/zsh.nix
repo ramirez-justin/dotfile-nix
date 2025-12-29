@@ -161,31 +161,6 @@
             bindkey "^[[1;3A" dirhistory_zle_dirhistory_up
             bindkey "^[[1;3B" dirhistory_zle_dirhistory_down
 
-            # FZF Enhanced Functions
-            # Directory navigation with preview
-            fzf-cd-with-hidden() {
-                local dir
-                dir=$(find "''${1:-$PWD}" -type d 2> /dev/null | fzf +m) && cd "$dir"
-            }
-
-            # Git status with preview
-            fzf-git-status() {
-                local selections=$(
-                git status --porcelain | \
-                fzf --ansi \
-                    --preview 'if [ -f {2} ]; then
-                                bat --color=always --style=numbers {2}
-                                elif [ -d {2} ]; then
-                                tree -C {2}
-                                fi' \
-                    --preview-window right:70% \
-                    --multi
-                )
-                if [ -n "$selections" ]; then
-                echo "$selections" | awk '{print $2}' | tr '\n' ' '
-                fi
-            }
-
             # FZF Key Bindings
             # CTRL-_ to open file in VSCode
             bindkey -s '^_' 'code $(fzf)^M'

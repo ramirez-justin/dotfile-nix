@@ -149,18 +149,20 @@ The repository is organized into logical components:
 │   ├── aliases.nix              # Shell aliases
 │   ├── default.nix              # Main user configuration
 │   ├── modules/                 # Configuration modules
-│   │   ├── alacritty/           # Terminal emulator
-│   │   │   ├── config.toml      # Alacritty configuration
-│   │   │   └── default.nix      # Module definition
-│   │   ├── aws-cred.nix         # AWS credentials management
-│   │   ├── aws.nix              # AWS CLI configuration
+│   │   ├── aws/                 # AWS CLI and credentials
+│   │   │   └── default.nix      # Combined AWS module
+│   │   ├── claude/              # Claude Code configuration
+│   │   │   ├── default.nix      # Module definition
+│   │   │   └── statusline.sh    # Statusline script
 │   │   ├── gcloud.nix           # Google Cloud SDK setup
+│   │   ├── ghostty/             # Terminal emulator
+│   │   │   ├── config.toml      # Ghostty configuration
+│   │   │   └── default.nix      # Module definition
 │   │   ├── git.nix              # Git configuration
 │   │   ├── github.nix           # GitHub CLI setup
 │   │   ├── karabiner/           # Keyboard customization
 │   │   │   └── default.nix      # Module definition
 │   │   ├── lazygit.nix          # Git TUI configuration
-│   │   ├── rectangle.nix        # Window management
 │   │   ├── tmux.nix             # Terminal multiplexer
 │   │   └── zsh.nix              # Shell configuration
 │   └── shell.nix                # Shell environment

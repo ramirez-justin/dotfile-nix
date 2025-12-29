@@ -8,4 +8,5 @@
     githubUsername = "ramirez-justin";
     hostname = "Macmini-localdomain";
     terminal = "ghostty";
+    awsRegion = "us-west-2";
 }

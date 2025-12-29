@@ -61,8 +61,7 @@
     ./shell.nix
     ./modules/tmux.nix
     # Cloud Platform Tools
-    ./modules/aws.nix
-    ./modules/aws-cred.nix
+    ./modules/aws
     ./modules/gcloud.nix
     # Development Tools
     ./modules/git.nix
@@ -70,7 +69,6 @@
     ./modules/python.nix
     # Core Environment
     ./modules/zsh.nix
-    ./modules/alacritty
     ./modules/claude
     ./modules/ghostty
     ./modules/karabiner

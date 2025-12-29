@@ -41,11 +41,11 @@ Guide to understanding, customizing, and creating modules in your Nix Darwin con
    ```nix
    # User-level configuration
    { config, pkgs, ... }: {
-     programs.alacritty = {
+     programs.tmux = {
        enable = true;
-       settings = {
+       extraConfig = ''
          # Configuration
-       };
+       '';
      };
    }
    ```
@@ -68,11 +68,10 @@ Guide to understanding, customizing, and creating modules in your Nix Darwin con
 2. **Modify Settings**
 
    ```nix
-   programs.alacritty = {
-     settings = {
-       window.opacity = 0.95;
-       font.size = 14;
-     };
+   programs.tmux = {
+     keyMode = "vi";
+     baseIndex = 1;
+     terminal = "screen-256color";
    };
    ```
 
