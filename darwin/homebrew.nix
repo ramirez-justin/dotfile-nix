@@ -182,6 +182,14 @@ in {
             "terraform-docs"              # Terraform documentation
             "tflint"                      # Terraform linter
             "tenv"                        # Terraform version manager
+
+            # Language Servers (LSP)
+            "yaml-language-server"        # YAML language server with schema validation
+            "bash-language-server"        # Bash/shell script language server
+            "shellcheck"                  # Shell script linter (used by bash-language-server)
+            "shfmt"                       # Shell script formatter (used by bash-language-server)
+            "dockerfile-language-server"  # Dockerfile language server
+            "markdown-oxide"              # PKM Markdown language server (wikilinks, Obsidian-style)
         ];
 
         # GUI Applications (Casks)

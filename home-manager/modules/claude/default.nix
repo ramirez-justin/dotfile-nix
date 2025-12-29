@@ -43,7 +43,7 @@
         ALPACA_PAPER = "true";
 
         # Enable LSP tool
-        ENABLE_LSP_TOOL = "1";
+        ENABLE_LSP_TOOL = 1;
       };
       statusLine = {
         type = "command";
@@ -52,6 +52,12 @@
       enabledPlugins = {
         "workflow@productivity-plugins" = true;
         "alpaca@productivity-plugins" = true;
+        "ruff-lsp@productivity-plugins" = true;
+        "vim-ls@productivity-plugins" = true;
+        "yaml-ls@productivity-plugins" = true;
+        "bash-ls@productivity-plugins" = true;
+        "docker-ls@productivity-plugins" = true;
+        "markdown-oxide@productivity-plugins" = true;
       };
     };
   };

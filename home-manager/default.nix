@@ -81,6 +81,8 @@
   home.packages = with pkgs; [
     oh-my-zsh
     claude-code
+    # Language Servers
+    vim-language-server    # VimScript language server
   ];
 
   programs = {
