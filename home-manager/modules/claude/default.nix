@@ -29,6 +29,8 @@
   home.file.".claude/settings.json" = {
     force = true;  # Overwrite existing file
     text = builtins.toJSON {
+      # Disable automatic context compaction
+      autoCompact = false;
       env = {
         # Trello integration
         TRELLO_API_KEY = "op://Telophase QS/Trello API key/API key";
@@ -46,6 +48,10 @@
       statusLine = {
         type = "command";
         command = "${config.home.homeDirectory}/.claude/statusline.sh";
+      };
+      enabledPlugins = {
+        "workflow@productivity-plugins" = true;
+        "alpaca@productivity-plugins" = true;
       };
     };
   };
