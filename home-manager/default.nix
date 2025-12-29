@@ -66,6 +66,7 @@
     # Development Tools
     ./modules/git.nix
     ./modules/github.nix
+    ./modules/mise.nix
     ./modules/python.nix
     # Core Environment
     ./modules/zsh.nix

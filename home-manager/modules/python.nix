@@ -14,8 +14,9 @@
 # - Code quality and formatting tools
 #
 # Integration:
-# - Works with mise for Python version management
+# - Works with mise for Python version management (see mise.nix)
 # - Packages are auto-installed when mise installs new Python versions
+# - mise.nix configures python_default_packages_file setting
 # - Declaratively managed via Nix configuration
 
 { config, pkgs, lib, ... }: {
@@ -26,11 +27,15 @@
     # Neovim integration
     pynvim
 
+    # lsp
+    pyright
+
     # Code quality and formatting
     ruff
     mypy
     isort
     black
+    codespell
 
     # Development utilities
     ipython
@@ -46,11 +51,5 @@
     requests
     click
   '';
-
-  # Optional: Set environment variables for Python development
-  home.sessionVariables = {
-    # Ensure mise Python is in PATH
-    MISE_PYTHON_DEFAULT_PACKAGES_FILE = "$HOME/.default-python-packages";
-  };
 
 }
