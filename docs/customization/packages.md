@@ -61,7 +61,7 @@ homebrew = {
 
   # GUI Applications
   casks = [
-    "alacritty"
+    "ghostty"
     "brave-browser"
     "visual-studio-code"
   ];

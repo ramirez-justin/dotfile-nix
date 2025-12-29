@@ -56,9 +56,7 @@ dotfile/
 │   ├── neovim.nix               # Neovim configuration
 │   │
 │   └── modules/                 # Modular configurations
-│       ├── alacritty/           # Alacritty terminal emulator
-│       ├── aws.nix              # AWS CLI configuration
-│       ├── aws-cred.nix         # AWS credentials management
+│       ├── aws/                 # AWS CLI and credentials (merged module)
 │       ├── claude/              # Claude Code configuration
 │       ├── gcloud.nix           # Google Cloud SDK setup
 │       ├── ghostty/             # Ghostty terminal emulator
@@ -67,7 +65,6 @@ dotfile/
 │       ├── karabiner/           # Keyboard customization
 │       ├── lazygit.nix          # LazyGit TUI configuration
 │       ├── python.nix           # Python environment
-│       ├── rectangle.nix        # Window management
 │       ├── tmux.nix             # Terminal multiplexer
 │       └── zsh.nix              # ZSH configuration
 │
@@ -99,7 +96,8 @@ Contains user-specific settings that are referenced throughout the system:
   email = "ramirez.justin@gmail.com";
   githubUsername = "ramirez-justin";
   hostname = "Macmini-localdomain";     # Used in flake reference
-  terminal = "ghostty";                 # Preferred terminal (ghostty or alacritty)
+  terminal = "ghostty";                 # Terminal emulator
+  awsRegion = "us-west-2";              # Default AWS region
 }
 ```
 

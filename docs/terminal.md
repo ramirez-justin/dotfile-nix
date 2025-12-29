@@ -71,19 +71,20 @@ bmp     # Process view
 bmt     # Tree view
 ```
 
-## Terminal Emulator (Alacritty)
+## Terminal Emulator (Ghostty)
 
 ### Configuration
 
-```nix
-# Configuration in home-manager/modules/alacritty/default.nix
-programs.alacritty = {
-  enable = true;
-  settings = {
-    window.opacity = 0.95;
-    font.size = 14;
-  };
-};
+Ghostty configuration is managed in `home-manager/modules/ghostty/`:
+
+```toml
+# home-manager/modules/ghostty/config.toml
+font-family = "JetBrainsMono Nerd Font"
+font-size = 14
+window-padding-x = 10
+window-padding-y = 10
+background-opacity = 0.95
+theme = "rose-pine"
 ```
 
 ## Keyboard Customization (Karabiner)

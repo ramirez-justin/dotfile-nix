@@ -65,6 +65,12 @@ fi
 # Helper Functions
 ###########################################
 
+# Command Existence Check
+# Returns true if command is available in PATH
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
 # File Removal Function
 # Safely removes files with dry-run support
 remove_file() {

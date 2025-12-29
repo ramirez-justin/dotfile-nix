@@ -40,7 +40,7 @@
 # - tmux-resurrect: Session saving
 # - tmux-continuum: Auto-save sessions
 # - tmux-autoreload: Auto config reload
-# - tmux-gruvbox: Theme integration
+# - rose-pine: Theme integration
 #
 # Integration:
 # - Works with shell config
@@ -121,14 +121,8 @@
         set -g @plugin 'tmux-plugins/tmux-resurrect'
         set -g @plugin 'tmux-plugins/tmux-continuum'
         set -g @plugin 'b0o/tmux-autoreload'
-        set -g @plugin 'egel/tmux-gruvbox'
         set -g @plugin '2kabhishek/tmux2k'
-
-        # Theme Configuration
-        # Gruvbox theme settings for consistent look
-        # set -g @tmux-gruvbox 'dark' # or 'dark256', 'light', 'light256'
         set -g @plugin 'rose-pine/tmux'
-        set -g @plugin 'tmux-plugins/tpm'
 
         # Plugin Settings
         # Configure plugin behavior

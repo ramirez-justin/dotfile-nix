@@ -9,10 +9,10 @@
 #
 # Features:
 # 1. Command Line:
-#    - Starship prompt:
+#    - Spaceship prompt:
 #      - Modern, minimal design
-#      - Using gruvbox-rainbow theme
-#      - Managed via configuration.nix
+#      - Installed via Homebrew
+#      - Initialized in flake.nix
 #
 # 2. Search & Navigation:
 #    - FZF integration:

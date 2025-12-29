@@ -45,7 +45,7 @@ System-level configurations affect the entire macOS system and all users. These 
        enable = true;
        onActivation.autoUpdate = true;
        brews = [ "git" ];
-       casks = [ "alacritty" "brave-browser" ];
+       casks = [ "ghostty" "brave-browser" ];
      };
    }
    ```
