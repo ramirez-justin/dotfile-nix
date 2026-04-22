@@ -30,9 +30,9 @@ let
 
     [settings]
     experimental = true
-    python_default_packages_file = "~/.default-python-packages"
 
     [settings.python]
+    default_packages_file = "~/.default-python-packages"
     uv_venv_auto = true
   '';
 in
