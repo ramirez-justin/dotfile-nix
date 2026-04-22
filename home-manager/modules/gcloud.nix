@@ -66,11 +66,11 @@ in
     shellAliases = {
       # Authentication Commands
       # Full authentication (user + application default)
-      gauth = "gcloud auth login && gcloud auth application-default login";
+      gauth = "op read 'op://Telophase QS/GCP ADC OAuth Client - tqs-dev/client_secret_821909658093-llr9utmgsb7u97nk4kv5679mtv2a2e60.apps.googleusercontent.com.json' > /tmp/adc_client_secret.json && gcloud auth login && gcloud auth application-default login --client-id-file=/tmp/adc_client_secret.json";
 
       # Individual authentication methods
       gauthuser = "gcloud auth login";                          # User authentication
-      gauthapp = "gcloud auth application-default login";       # Application default credentials
+      gauthapp = "op read 'op://Telophase QS/GCP ADC OAuth Client - tqs-dev/client_secret_821909658093-llr9utmgsb7u97nk4kv5679mtv2a2e60.apps.googleusercontent.com.json' > /tmp/adc_client_secret.json && gcloud auth application-default login --client-id-file=/tmp/adc_client_secret.json";       # Application default credentials
 
       # Authentication status
       gauthls = "gcloud auth list";                             # List authenticated accounts

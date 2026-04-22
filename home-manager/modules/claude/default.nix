@@ -60,11 +60,18 @@ in
   home.file.".claude/settings.json" = {
     force = true;  # Overwrite existing file
     text = builtins.toJSON {
+      # Main session model (alias resolves to latest Opus, currently 4.7)
+      model = "opus";
       # Disable automatic context compaction
       autoCompact = false;
       autoCompactEnabled = false;
       includeCoAuthoredBy = false;
       env = {
+        # Run subagents on Sonnet while keeping the main session on Opus.
+        # Applies to all subagents (including those spawned by superpowers
+        # plugin orchestrators), and survives plugin updates.
+        CLAUDE_CODE_SUBAGENT_MODEL = "sonnet";
+
         # Trello integration
         TRELLO_API_KEY = "op://Telophase QS/Trello API key/API key";
         TRELLO_TOKEN = "op://Telophase QS/Trello API key/Trello Token";
@@ -106,6 +113,7 @@ in
         "pyright-lsp@claude-plugins-official" = true;
         "lua-lsp@claude-plugins-official" = true;
         "code-review@claude-plugins-official" = true;
+        "skill-creator@claude-plugins-official" = true;
         "superpowers@superpowers-marketplace" = true;
         "trello@productivity-plugins" = true;
       };
