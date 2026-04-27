@@ -262,13 +262,9 @@ done
 
 Expected: every line `OK:` (note: `spaceship` resolves under `$(brew --prefix)/opt/spaceship/spaceship.zsh`, not as a binary, so check via `test -f "$(brew --prefix)/opt/spaceship/spaceship.zsh"` instead — adjust if it shows MISSING).
 
-- [ ] **Step 3: Install gke-gcloud-auth-plugin**
+- [ ] **Step 3: Install gke-gcloud-auth-plugin — DEFERRED to Phase 6 post-uninstall**
 
-```bash
-gcloud components install gke-gcloud-auth-plugin --quiet
-```
-
-Expected: install succeeds (or already-installed message).
+While Nix is still installed, `gcloud` resolves to `/nix/store/.../google-cloud-sdk/bin/gcloud` (read-only Nix store), so `gcloud components install gke-gcloud-auth-plugin` would either fail or silently install into the wrong location. Defer to Task 6.4a (added below). After Nix uninstall, brew's `gcloud` will be the only one on PATH.
 
 ---
 
@@ -1342,6 +1338,24 @@ done
 ```
 
 Expected: every line `LINK:` (target file is a symlink into `~/dev/dotfiles/...`). Any `FILE (not link)` or `MISSING:` is a stow problem; resolve before proceeding.
+
+### Task 6.4a: Install gke-gcloud-auth-plugin (deferred from Task 2.3)
+
+- [ ] **Step 1: Confirm we're now using brew's gcloud**
+
+```bash
+which gcloud
+```
+
+Expected: `/opt/homebrew/bin/gcloud` (or wherever the brew cask installed it; **not** any `/nix/store/...` path).
+
+- [ ] **Step 2: Install the plugin**
+
+```bash
+gcloud components install gke-gcloud-auth-plugin --quiet
+```
+
+Expected: install succeeds. Verify with `gcloud components list --format='value(id,state.name)' | grep gke` showing `Installed`.
 
 ### Task 6.4: Inject Claude MCP servers into `~/.claude.json`
 
